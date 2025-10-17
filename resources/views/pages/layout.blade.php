@@ -1,0 +1,5 @@
+@include('pages.header')
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+@include('pages.navbar')
+@yield('content')
+@include('pages.footer')
