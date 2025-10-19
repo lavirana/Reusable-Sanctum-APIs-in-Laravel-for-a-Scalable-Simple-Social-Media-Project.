@@ -18,6 +18,15 @@
 											<div class="user-specs">
 												<h3>Ashish Rana</h3>
 												<span>Coder at Self Employed</span>
+												<br>
+												<br>
+	
+	<!-- Follow / Unfollow button -->
+<button id="followBtn" 
+        class="btn-sm btn-primary" style="background: linear-gradient(135deg, #43cea2, #185a9d);
+    border-radius: 1px;">
+  Loading...
+</button>
 											</div>
 										</div><!--user-profile end-->
 										<ul class="user-fw-status">

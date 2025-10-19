@@ -201,5 +201,49 @@ $(document).ready(function(){
 });
 </script>
 
+<script>
+$(document).ready(function() {
+
+    const userId = $('#profileUserId').val();
+    const token = localStorage.getItem('token'); // your Sanctum or JWT token
+
+    // When user clicks follow/unfollow
+    $('#followBtn').on('click', function() {
+        $.ajax({
+            url: '/api/follow',
+            type: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            },
+            data: {
+                follower_id: 1, // current logged-in user (get from auth)
+                followed_id: userId
+            },
+            success: function(res) {
+                // res should return { "status": "followed" } or { "status": "unfollowed" }
+                updateButton(res.status);
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    // Optional: load initial state using same API (if it supports GET)
+    // Or just default it to "Follow" if no status API exists.
+    updateButton('unfollowed');
+
+    function updateButton(status) {
+        if (status === 'followed') {
+            $('#followBtn').text('Unfollow').css('background', '#e53935');
+        } else {
+            $('#followBtn').text('Follow').css('background', '#00796b');
+        }
+    }
+
+});
+</script>
+
 
 </html>

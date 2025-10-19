@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\LikeController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\FollowController;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function (){
         Route::post('/posts/{post}/comments', [CommentController::class, 'store']);
         Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
         Route::post('/posts/{post}/like', [LikeController::class, 'toggle']);
+        Route::post('/follow/{userId}', [FollowController::class, 'toggle']);
         Route::apiResource('categories', CategoryController::class)->only(['index', 'store']);
 });
 
