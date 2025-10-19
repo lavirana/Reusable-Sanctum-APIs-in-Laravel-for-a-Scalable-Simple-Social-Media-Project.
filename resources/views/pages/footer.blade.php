@@ -9,11 +9,9 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   axios.defaults.baseURL = '/api';
-  // if token exists, ensure header set (for page reloads)
   const token = localStorage.getItem('token');
   if (token) axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-  // helper: escape text to avoid XSS when injecting HTML
   function escapeHtml(unsafe) {
     return unsafe
       .replace(/&/g, "&amp;")
@@ -32,18 +30,28 @@ document.addEventListener('DOMContentLoaded', function () {
     const html = posts.map(p => `
       <div class="card mb-3" id="post-${p.id}">
         <div class="card-body" style="padding:10px;">
-        <div class="usy-dt" style="margin-right: 10px;">
-									<img src="http://localhost:8000/images/lavi.jpg" alt="" style="width: 36px;border: 1px solid #3ab07f;">
-					</div>
-            <h5>${escapeHtml(p.title)}</h5>
-            <p>${escapeHtml(p.body)}</p>
-          <p class="text-muted small" style="margin-bottom: 5px;" >By ${escapeHtml(p.user?.name || 'Unknown')}</p>
+          <div class="d-flex align-items-center mb-2">
+            <img src="http://localhost:8000/images/lavi.jpg" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
+            <strong>${escapeHtml(p.user?.name || 'Unknown')}</strong>
+          </div>
+          <h5>${escapeHtml(p.title)}</h5>
+          <p>${escapeHtml(p.body)}</p>
+
           <button class="btn btn-sm btn-outline-primary" onclick="toggleLike(${p.id}, this)">
-            ❤️ <span id="likes-count-${p.id}">${p.likes_count ?? ''}</span>
+            ❤️ <span id="likes-count-${p.id}">${p.likes_count ?? 0}</span>
           </button>
-          <button class="btn btn-sm btn-outline-secondary" onclick="openComments(${p.id})">
+          <button class="btn btn-sm btn-outline-secondary" onclick="toggleComments(${p.id})">
             💬 Comments
           </button>
+
+          <!-- comments area -->
+          <div id="comments-container-${p.id}" class="comments-area mt-2" style="display:none;">
+            <div class="comments-list mb-2" id="comments-list-${p.id}" style="padding-left:10px;"></div>
+            <div class="input-group input-group-sm">
+              <input type="text" id="comment-input-${p.id}" class="form-control" placeholder="Write a comment...">
+              <button class="btn btn-success" onclick="addComment(${p.id})">Post</button>
+            </div>
+          </div>
         </div>
       </div>
     `).join('');
@@ -51,28 +59,20 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('postsContainer').innerHTML = html;
   }
 
-  // GET posts
+  // Fetch posts initially
   axios.get('/posts')
-    .then(res => {
-      renderPosts(res.data);
-    })
+    .then(res => renderPosts(res.data))
     .catch(err => {
       console.error(err);
-      if (err.response && err.response.status === 401) {
-        // not authenticated — redirect to login or show login UI
-        window.location.href = '/login';
-      } else {
-        document.getElementById('postsContainer').innerHTML = '<p>Error loading posts.</p>';
-      }
+      if (err.response && err.response.status === 401) window.location.href = '/login';
+      else document.getElementById('postsContainer').innerHTML = '<p>Error loading posts.</p>';
     });
 
-  // Make toggleLike global so buttons can call it
+  // Like function
   window.toggleLike = function(postId, btn) {
     axios.post(`/posts/${postId}/like`)
       .then(res => {
-        // Optionally update UI
-        const status = res.data.status; // 'liked' or 'unliked'
-        // Increase/decrease likes count (if provided)
+        const status = res.data.status;
         const span = document.getElementById(`likes-count-${postId}`);
         if (span) {
           let n = parseInt(span.textContent || '0');
@@ -81,21 +81,56 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       })
       .catch(err => {
-        if (err.response && err.response.status === 401) {
-          window.location.href = '/login';
-        } else {
-          alert('Error toggling like');
-        }
+        if (err.response && err.response.status === 401) window.location.href = '/login';
+        else alert('Error toggling like');
       });
   };
 
-  // Example comments loader
-  window.openComments = function(postId) {
+  // Show/hide comments
+  window.toggleComments = function(postId) {
+    const container = document.getElementById(`comments-container-${postId}`);
+    if (container.style.display === 'none') {
+      container.style.display = 'block';
+      loadComments(postId);
+    } else {
+      container.style.display = 'none';
+    }
+  };
+
+  // Load comments
+  function loadComments(postId) {
     axios.get(`/posts/${postId}/comments`)
       .then(res => {
-         // show comments in a modal or below post
-         console.log('comments:', res.data);
-         alert('Check console for comments (implement UI)');
+        const list = document.getElementById(`comments-list-${postId}`);
+        if (!res.data.length) {
+          list.innerHTML = `<p class="text-muted small">No comments yet.</p>`;
+          return;
+        }
+        list.innerHTML = res.data.map(c => `
+          <div class="comment-item mb-1 p-1 border-bottom">
+            <strong>${escapeHtml(c.user?.name || 'Anon')}</strong>: ${escapeHtml(c.body)}
+          </div>
+        `).join('');
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
+  // Add comment
+  window.addComment = function(postId) {
+    const input = document.getElementById(`comment-input-${postId}`);
+    const text = input.value.trim();
+    if (!text) return;
+
+    axios.post(`/posts/${postId}/comments`, { body: text })
+      .then(() => {
+        input.value = '';
+        loadComments(postId);
+      })
+      .catch(err => {
+        if (err.response && err.response.status === 401) window.location.href = '/login';
+        else alert('Error adding comment');
       });
   };
 });
