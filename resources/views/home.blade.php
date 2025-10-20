@@ -22,11 +22,14 @@
 												<br>
 	
 	<!-- Follow / Unfollow button -->
-<button id="followBtn" 
-        class="btn-sm btn-primary" style="background: linear-gradient(135deg, #43cea2, #185a9d);
+
+
+<input type="hidden" id="profileUserId" value="2">
+<button id="followBtn" class="btn-sm btn-primary" style="background: linear-gradient(135deg, #43cea2, #185a9d);
     border-radius: 1px;">
   Loading...
 </button>
+
 											</div>
 										</div><!--user-profile end-->
 										<ul class="user-fw-status">

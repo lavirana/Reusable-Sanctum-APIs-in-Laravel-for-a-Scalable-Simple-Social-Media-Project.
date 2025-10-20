@@ -12,7 +12,9 @@ class FollowController extends Controller
         //if already the entry exist in the follows table, then check the status and toggle it
         //else create a new entry with follow status
 
-        $login_user_id = $request->auth()->user()->id;
+   
+        $login_user_id = auth()->id();
+
         //$login_user_id = 1;
         $follow_to_user_id = $userId;
 
@@ -26,7 +28,7 @@ class FollowController extends Controller
 
         if ($follow) {
             // Toggle follow status
-            $follow->follow_status = $follow->follow_status === 'follow' ? 'unfollow' : 'follow';
+            $follow->follow_status = $follow->follow_status === 'followed' ? 'unfollowed' : 'followed';
             $follow->save();
             $status = $follow->follow_status;
         } else {

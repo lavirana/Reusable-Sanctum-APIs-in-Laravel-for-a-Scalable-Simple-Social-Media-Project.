@@ -2,7 +2,6 @@
 <script type="text/javascript" src="{{ asset('js/popper.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/jquery.mCustomScrollbar.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/slick/slick.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/scrollbar.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 </body>
@@ -202,48 +201,45 @@ $(document).ready(function(){
 </script>
 
 <script>
-$(document).ready(function() {
+$(function() {
+  const userId = $('#profileUserId').val();
+  const token  = localStorage.getItem('token');
+  const $btn   = $('#followBtn');
 
-    const userId = $('#profileUserId').val();
-    const token = localStorage.getItem('token'); // your Sanctum or JWT token
+  if (!userId) return;
 
-    // When user clicks follow/unfollow
-    $('#followBtn').on('click', function() {
-        $.ajax({
-            url: '/api/follow',
-            type: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            },
-            data: {
-                follower_id: 1, // current logged-in user (get from auth)
-                followed_id: userId
-            },
-            success: function(res) {
-                // res should return { "status": "followed" } or { "status": "unfollowed" }
-                updateButton(res.status);
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-            }
-        });
+  // Update button style/text
+  function updateButton(status) {
+    const isFollowed = status === 'followed';
+    $btn.text(isFollowed ? 'Unfollow' : 'Follow')
+        .css('background', isFollowed ? '#e53935' : '#00796b')
+        .prop('disabled', false);
+  }
+
+  // Click handler
+  $btn.on('click', function() {
+    $btn.prop('disabled', true).text('Please wait...');
+
+    $.ajax({
+      url: `http://localhost:8000/api/follow/${userId}`,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      },
+      success(res) {
+        updateButton(res.status || 'unfollowed');
+      },
+      error() {
+        alert('Something went wrong.');
+        $btn.prop('disabled', false).text('Follow');
+      }
     });
+  });
 
-    // Optional: load initial state using same API (if it supports GET)
-    // Or just default it to "Follow" if no status API exists.
-    updateButton('unfollowed');
-
-    function updateButton(status) {
-        if (status === 'followed') {
-            $('#followBtn').text('Unfollow').css('background', '#e53935');
-        } else {
-            $('#followBtn').text('Follow').css('background', '#00796b');
-        }
-    }
-
+  // Default state
+  updateButton('unfollowed');
 });
 </script>
-
 
 </html>
