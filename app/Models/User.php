@@ -75,6 +75,11 @@ public function following(){
 }
 
 
+public function profileViews()
+{
+    return $this->hasMany(ProfileView::class, 'viewed_user_id');
+}
+
 
 
 }

@@ -200,15 +200,49 @@ $(document).ready(function(){
 });
 </script>
 
+
 <script>
-$(function() {
-  const userId = $('#profileUserId').val();
-  const token  = localStorage.getItem('token');
-  const $btn   = $('#followBtn');
+$(document).ready(function() {
 
-  if (!userId) return;
+  const userId = $('.setprofileUserId').val();   // Profile being viewed (from hidden input)
+  const token  = localStorage.getItem('token');  // Logged-in user's token
+  const $btn   = $('#followBtn');                // Follow/Unfollow button
 
-  // Update button style/text
+  // Initially hide the button (we’ll show it later if needed)
+  $btn.css('display', 'none');
+
+  if (!userId || !token) return;
+
+  // Step 1: Get logged-in user info
+  $.ajax({
+    url: 'http://localhost:8000/api/v1/me',
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    },
+    success: function(res) {
+      // make sure res.user exists or fallback
+      const loggedInUserId = res.id || (res.user && res.user.id);
+      console.log('Logged-in User ID:', loggedInUserId, 'Profile User ID:', userId);
+
+      // Step 2: Hide Follow button if viewing own profile
+      if (parseInt(userId) === parseInt(loggedInUserId)) {
+        console.log('Own profile detected — hiding follow button');
+        $btn.css('display', 'none');  // ✅ Hide using display:none
+        return; // Stop further code
+      }
+
+      // Otherwise, show and set button state
+      $btn.css('display', 'inline-block'); // ✅ Show button for other users
+      updateButton('unfollowed');
+    },
+    error: function(xhr) {
+      console.error('Failed to fetch user info.', xhr.responseText);
+    }
+  });
+
+  // Step 3: Function to update button appearance
   function updateButton(status) {
     const isFollowed = status === 'followed';
     $btn.text(isFollowed ? 'Unfollow' : 'Follow')
@@ -216,7 +250,7 @@ $(function() {
         .prop('disabled', false);
   }
 
-  // Click handler
+  // Step 4: Follow/Unfollow click handler
   $btn.on('click', function() {
     $btn.prop('disabled', true).text('Please wait...');
 
@@ -236,17 +270,16 @@ $(function() {
       }
     });
   });
-
-  // Default state
-  updateButton('unfollowed');
 });
 </script>
+
+
+
 
 <script>
 $(document).ready(function() {
 
     const token = localStorage.getItem('token'); // Sanctum token
-
     $.ajax({
         url: '/api/v1/me',
         type: 'GET',
@@ -257,7 +290,7 @@ $(document).ready(function() {
         success: function(res) {
          
             $('.user-profile h3').text(res.name);
-            $('#profileUserId').val(res.id);
+            $('.setprofileUserId').val(res.id);
             $('.followers').text(res.followers_count);
             $('.following').text(res.following_count);
             
@@ -273,5 +306,29 @@ $(document).ready(function() {
 });
 </script>
 
+
+<!--<script>
+$(document).ready(function() {
+    $.ajax({
+        url: 'http://localhost:8000/api/v1/most-viewed',
+        type: 'GET',
+        success: function(res) {
+            let html = '';
+            res.forEach(user => {
+                html += `
+                    <div class="viewed-user-card">
+                        <h4>${user.name}</h4>
+                        <p>Total Views: ${user.total_views}</p>
+                    </div>
+                `;
+            });
+            $('#mostViewedList').html(html);
+        },
+        error: function(xhr) {
+            console.error(xhr.responseText);
+        }
+    });
+});
+</script>-->
 
 </html>

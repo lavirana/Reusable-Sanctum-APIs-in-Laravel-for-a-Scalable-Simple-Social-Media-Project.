@@ -17,15 +17,21 @@
 									</div><!--username-dt end-->
 									<div class="user-specs">
 										<h3></h3>
-										
 										<!-- Follow / Unfollow button -->
-										<input type="hidden" id="profileUserId" value="2">
-										<button id="followBtn" class="btn-sm btn-primary" style="background: linear-gradient(135deg, #43cea2, #185a9d);
-										border-radius: 1px;">
+										<input type="hidden" id="profileUserId" class="setprofileUserId">
+										<!--<input type="hidden" id="profileUserId" value="2">-->
+
+										<button id="followBtn" class="btn-sm btn-primary"
+											style="background:linear-gradient(135deg, #43cea2, #185a9d);border-radius:1px;">
 											Loading...
 										</button>
+
 									</div>
 								</div><!--user-profile end-->
+
+
+								
+
 
 								<ul class="user-fw-status">
 									<li>
@@ -69,31 +75,67 @@
 									<i class="la la-ellipsis-v"></i>
 								</div><!--sd-title end-->
 								<div class="suggestions-list">
-									<div class="suggestion-usd">
-										<img src="https://gambolthemes.net/workwise-new/images/resources/s1.png" alt="">
-										<div class="sgt-text">
-											<h4>Reetika Rajput</h4>
-										</div>
-									</div>
-									<div class="suggestion-usd">
-										<img src="https://gambolthemes.net/workwise-new/images/resources/s2.png" alt="">
-										<div class="sgt-text">
-											<h4>Rahul Rana</h4>
-										</div>
-									</div>
-									<div class="suggestion-usd">
-										<img src="https://gambolthemes.net/workwise-new/images/resources/s3.png" alt="">
-										<div class="sgt-text">
-											<h4>Rakesh Verma</h4>
-										</div>
-									</div>
-									<div class="view-more">
-										<a href="#" title="" style="color: #185a9d;">View More</a>
-									</div>
+									<div id="mostViewedList"></div>
 								</div><!--suggestions-list end-->
 							</div>
 						</div><!--right-sidebar end-->
+
+						<div class="right-sidebar">
+  <div class="widget suggestions full-width">
+    <div class="sd-title" style="display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="margin: 0;">Make Friends</h3>
+      <i class="la la-ellipsis-v" style="cursor:pointer;"></i>
+    </div>
+    <!-- sd-title end -->
+
+    <div class="suggestions-list" style="padding: 10px;">
+
+      <!-- User Box 1 -->
+      <div class="suggestion-usd" style="display:flex;align-items:center;margin-bottom:12px;padding:10px;border-radius:8px;background:#f8f9fa;">
+        <img src="https://i.pravatar.cc/60?img=1" alt="" style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
+        <div style="flex:1;margin-left:10px;">
+          <h4 style="margin:0;font-size:15px;">Amit Sharma</h4>
+          <span style="font-size:13px;color:#666;">Web Developer</span>
+        </div>
+        <button class="btn-sm btn-follow" style="background:linear-gradient(135deg, #43cea2, #185a9d);color:#fff;border:none;padding:6px 10px;border-radius:4px;">Follow</button>
+      </div>
+
+      <!-- User Box 2 -->
+      <div class="suggestion-usd" style="display:flex;align-items:center;margin-bottom:12px;padding:10px;border-radius:8px;background:#f8f9fa;">
+        <img src="https://i.pravatar.cc/60?img=2" alt="" style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
+        <div style="flex:1;margin-left:10px;">
+          <h4 style="margin:0;font-size:15px;">Neha Verma</h4>
+          <span style="font-size:13px;color:#666;">UI/UX Designer</span>
+        </div>
+        <button class="btn-sm btn-follow" style="background:linear-gradient(135deg, #43cea2, #185a9d);color:#fff;border:none;padding:6px 10px;border-radius:4px;">Follow</button>
+      </div>
+
+      <!-- User Box 3 -->
+      <div class="suggestion-usd" style="display:flex;align-items:center;margin-bottom:12px;padding:10px;border-radius:8px;background:#f8f9fa;">
+        <img src="https://i.pravatar.cc/60?img=3" alt="" style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
+        <div style="flex:1;margin-left:10px;">
+          <h4 style="margin:0;font-size:15px;">Ravi Patel</h4>
+          <span style="font-size:13px;color:#666;">Digital Marketer</span>
+        </div>
+        <button class="btn-sm btn-follow" style="background:linear-gradient(135deg, #43cea2, #185a9d);color:#fff;border:none;padding:6px 10px;border-radius:4px;">Follow</button>
+      </div>
+
+      <!-- User Box 4 -->
+      <div class="suggestion-usd" style="display:flex;align-items:center;margin-bottom:12px;padding:10px;border-radius:8px;background:#f8f9fa;">
+        <img src="https://i.pravatar.cc/60?img=4" alt="" style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
+        <div style="flex:1;margin-left:10px;">
+          <h4 style="margin:0;font-size:15px;">Priya Singh</h4>
+          <span style="font-size:13px;color:#666;">Content Creator</span>
+        </div>
+        <button class="btn-sm btn-follow" style="background:linear-gradient(135deg, #43cea2, #185a9d);color:#fff;border:none;padding:6px 10px;border-radius:4px;">Follow</button>
+      </div>
+
+    </div><!-- suggestions-list end -->
+  </div>
+</div><!-- right-sidebar end -->
+
 					</div>
+					
 				</div>
 			</div><!-- main-section-data end-->
 		</div>

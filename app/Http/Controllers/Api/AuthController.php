@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -90,5 +91,17 @@ class AuthController extends Controller
         'data' => $request->user()
     ]);
     }
+
+    public function mostViewed()
+{
+    $users = User::select('users.id', 'users.name', 'users.email', DB::raw('COUNT(profile_views.id) as total_views'))
+        ->leftJoin('profile_views', 'users.id', '=', 'profile_views.viewed_user_id')
+        ->groupBy('users.id', 'users.name', 'users.email')
+        ->orderByDesc('total_views')
+        ->limit(10)
+        ->get();
+
+    return response()->json($users);
+}
 
 }
