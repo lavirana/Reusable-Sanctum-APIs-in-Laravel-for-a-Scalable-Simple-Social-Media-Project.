@@ -242,4 +242,36 @@ $(function() {
 });
 </script>
 
+<script>
+$(document).ready(function() {
+
+    const token = localStorage.getItem('token'); // Sanctum token
+
+    $.ajax({
+        url: '/api/v1/me',
+        type: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+        },
+        success: function(res) {
+         
+            $('.user-profile h3').text(res.name);
+            $('#profileUserId').val(res.id);
+            $('.followers').text(res.followers_count);
+            $('.following').text(res.following_count);
+            
+            if (res.profile_photo) {
+                $('.usr-pic img').attr('src', 'http://localhost:8000/images/' + res.profile_photo);
+            }
+        },
+        error: function(xhr) {
+            console.error('Error:', xhr.responseText);
+        }
+    });
+
+});
+</script>
+
+
 </html>

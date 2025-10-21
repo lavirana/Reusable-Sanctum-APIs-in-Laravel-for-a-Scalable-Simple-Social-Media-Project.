@@ -63,7 +63,12 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        return response()->json($request->user());
+        $user = $request->user();
+
+        $user->followers_count = $user->followers()->count();
+        $user->following_count = $user->following()->count();
+
+        return response()->json($user);
     }
 
     public function update(Request $request){
