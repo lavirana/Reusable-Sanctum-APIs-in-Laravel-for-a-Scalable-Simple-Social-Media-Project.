@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -104,4 +105,32 @@ class AuthController extends Controller
     return response()->json($users);
 }
 
+public function allUsersExceptMe(Request $request)
+{
+    $user = $request->user(); // logged-in user via Sanctum
+
+    $users = User::where('id', '!=', $user->id)
+        ->select('id', 'name', 'email')
+        ->latest()
+        ->get()
+        ->map(function ($u) use ($user) {
+            // Check if logged-in user already follows this user
+            $isFollowing = Follow::where('follower_id', $user->id)
+                ->where('followed_id', $u->id)
+                ->where('follow_status', 'followed')
+                ->exists();
+
+            $u->is_following = $isFollowing;
+            return $u;
+        });
+
+    return response()->json([
+        'status' => true,
+        'total' => $users->count(),
+        'users' => $users
+    ]);
 }
+
+
+}
+

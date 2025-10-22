@@ -9,8 +9,7 @@
 						<div class="main-left-sidebar no-margin">
 							<div class="user-data full-width">
 								<div class="user-profile">
-									<div class="username-dt" style="background: linear-gradient(135deg, #43cea2, #185a9d);
-">
+			                       <div class="username-dt" style="background: linear-gradient(135deg, #43cea2, #185a9d);">
 										<div class="usr-pic">
 											<img src="http://localhost:8000/images/lavi.jpg" alt="">
 										</div>
@@ -20,19 +19,13 @@
 										<!-- Follow / Unfollow button -->
 										<input type="hidden" id="profileUserId" class="setprofileUserId">
 										<!--<input type="hidden" id="profileUserId" value="2">-->
-
-										<button id="followBtn" class="btn-sm btn-primary"
+										<button id="" class="btn-sm btn-primary followBtn"
 											style="background:linear-gradient(135deg, #43cea2, #185a9d);border-radius:1px;">
 											Loading...
 										</button>
 
 									</div>
 								</div><!--user-profile end-->
-
-
-								
-
-
 								<ul class="user-fw-status">
 									<li>
 										<h4>Following</h4>
@@ -82,57 +75,13 @@
 
 						<div class="right-sidebar">
   <div class="widget suggestions full-width">
-    <div class="sd-title" style="display: flex; justify-content: space-between; align-items: center;">
-      <h3 style="margin: 0;">Make Friends</h3>
-      <i class="la la-ellipsis-v" style="cursor:pointer;"></i>
+    <div class="sd-title">
+      <h3>Make Friends</h3>
+      <i class="la la-ellipsis-v"></i>
     </div>
-    <!-- sd-title end -->
-
-    <div class="suggestions-list" style="padding: 10px;">
-
-      <!-- User Box 1 -->
-      <div class="suggestion-usd" style="display:flex;align-items:center;margin-bottom:12px;padding:10px;border-radius:8px;background:#f8f9fa;">
-        <img src="https://i.pravatar.cc/60?img=1" alt="" style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
-        <div style="flex:1;margin-left:10px;">
-          <h4 style="margin:0;font-size:15px;">Amit Sharma</h4>
-          <span style="font-size:13px;color:#666;">Web Developer</span>
-        </div>
-        <button class="btn-sm btn-follow" style="background:linear-gradient(135deg, #43cea2, #185a9d);color:#fff;border:none;padding:6px 10px;border-radius:4px;">Follow</button>
-      </div>
-
-      <!-- User Box 2 -->
-      <div class="suggestion-usd" style="display:flex;align-items:center;margin-bottom:12px;padding:10px;border-radius:8px;background:#f8f9fa;">
-        <img src="https://i.pravatar.cc/60?img=2" alt="" style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
-        <div style="flex:1;margin-left:10px;">
-          <h4 style="margin:0;font-size:15px;">Neha Verma</h4>
-          <span style="font-size:13px;color:#666;">UI/UX Designer</span>
-        </div>
-        <button class="btn-sm btn-follow" style="background:linear-gradient(135deg, #43cea2, #185a9d);color:#fff;border:none;padding:6px 10px;border-radius:4px;">Follow</button>
-      </div>
-
-      <!-- User Box 3 -->
-      <div class="suggestion-usd" style="display:flex;align-items:center;margin-bottom:12px;padding:10px;border-radius:8px;background:#f8f9fa;">
-        <img src="https://i.pravatar.cc/60?img=3" alt="" style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
-        <div style="flex:1;margin-left:10px;">
-          <h4 style="margin:0;font-size:15px;">Ravi Patel</h4>
-          <span style="font-size:13px;color:#666;">Digital Marketer</span>
-        </div>
-        <button class="btn-sm btn-follow" style="background:linear-gradient(135deg, #43cea2, #185a9d);color:#fff;border:none;padding:6px 10px;border-radius:4px;">Follow</button>
-      </div>
-
-      <!-- User Box 4 -->
-      <div class="suggestion-usd" style="display:flex;align-items:center;margin-bottom:12px;padding:10px;border-radius:8px;background:#f8f9fa;">
-        <img src="https://i.pravatar.cc/60?img=4" alt="" style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
-        <div style="flex:1;margin-left:10px;">
-          <h4 style="margin:0;font-size:15px;">Priya Singh</h4>
-          <span style="font-size:13px;color:#666;">Content Creator</span>
-        </div>
-        <button class="btn-sm btn-follow" style="background:linear-gradient(135deg, #43cea2, #185a9d);color:#fff;border:none;padding:6px 10px;border-radius:4px;">Follow</button>
-      </div>
-
-    </div><!-- suggestions-list end -->
+    <div class="users-list"><!-- users will load here --></div>
   </div>
-</div><!-- right-sidebar end -->
+</div>
 
 					</div>
 					

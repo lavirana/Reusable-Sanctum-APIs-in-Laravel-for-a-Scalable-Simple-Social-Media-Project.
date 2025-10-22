@@ -206,7 +206,7 @@ $(document).ready(function() {
 
   const userId = $('.setprofileUserId').val();   // Profile being viewed (from hidden input)
   const token  = localStorage.getItem('token');  // Logged-in user's token
-  const $btn   = $('#followBtn');                // Follow/Unfollow button
+  const $btn   = $('.followBtn');                // Follow/Unfollow button
 
   // Initially hide the button (we’ll show it later if needed)
   $btn.css('display', 'none');
@@ -307,7 +307,122 @@ $(document).ready(function() {
 </script>
 
 
-<!--<script>
+<script>
+$(document).ready(function() {
+  const token = localStorage.getItem('token');
+  const $list = $('.users-list');
+
+  if (!token) {
+    console.error("Token not found. Please login first.");
+    return;
+  }
+
+  // Fetch logged-in user info first
+  $.ajax({
+    url: 'http://localhost:8000/api/v1/me',
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    },
+    success: function(me) {
+      const loggedInUserId = me.id;
+
+      // Fetch all users except logged-in one
+      $.ajax({
+        url: 'http://localhost:8000/api/v1/all_users',
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        },
+        success: function(res) {
+          $list.empty();
+
+          if (res.users && res.users.length > 0) {
+            res.users.forEach(function(user, index) {
+              // Skip the logged-in user
+              if (user.id === loggedInUserId) return;
+
+              const isFollowed = user.is_following || false; // API should send this
+              const btnText = isFollowed ? 'Unfollow' : 'Follow';
+              const btnColor = isFollowed ? '#e53935' : '#43cea2';
+
+              const userHtml = `
+                <div class="suggestion-usd" 
+                     data-user-id="${user.id}"
+                     style="display:flex;align-items:center;margin-bottom:12px;
+                            padding:10px;border-radius:8px;background:#f8f9fa;">
+                  <img src="${user.profile_photo_path 
+                              ? 'http://localhost:8000/' + user.profile_photo_path 
+                              : 'https://i.pravatar.cc/60?img=' + (index + 1)}"
+                       alt="${user.name}" 
+                       style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
+                  <div style="flex:1;margin-left:10px;">
+                    <h4 style="margin:0;font-size:15px;">${user.name}</h4>
+                  </div>
+                  <button class="btn-sm btn-follow" 
+                          data-status="${isFollowed ? 'followed' : 'unfollowed'}"
+                          style="background:linear-gradient(135deg,${btnColor},#185a9d);
+                                 color:#fff;border:none;padding:6px 10px;border-radius:4px;">
+                    ${btnText}
+                  </button>
+                </div>
+              `;
+              $list.append(userHtml);
+            });
+          } else {
+            $list.html('<p>No users found.</p>');
+          }
+        },
+        error: function(err) {
+          console.error('Error loading users:', err);
+          $list.html('<p style="color:red;">Failed to load users.</p>');
+        }
+      });
+    },
+    error: function() {
+      console.error("Couldn't fetch logged-in user info");
+    }
+  });
+
+  // Handle Follow/Unfollow Button Click
+  $(document).on('click', '.btn-follow', function() {
+    const $btn = $(this);
+    const userId = $btn.closest('.suggestion-usd').data('user-id');
+    const currentStatus = $btn.data('status');
+
+    $btn.prop('disabled', true).text('Please wait...');
+
+    $.ajax({
+      url: `http://localhost:8000/api/follow/${userId}`,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      },
+      success: function(res) {
+        const newStatus = res.status || (currentStatus === 'followed' ? 'unfollowed' : 'followed');
+        const isFollowed = newStatus === 'followed';
+
+        $btn.text(isFollowed ? 'Unfollow' : 'Follow')
+            .data('status', newStatus)
+            .css('background', isFollowed 
+                ? 'linear-gradient(135deg,#e53935,#b71c1c)'
+                : 'linear-gradient(135deg,#43cea2,#185a9d)')
+            .prop('disabled', false);
+      },
+      error: function() {
+        alert('Something went wrong.');
+        $btn.prop('disabled', false).text('Follow');
+      }
+    });
+  });
+});
+</script>
+
+
+<script>
 $(document).ready(function() {
     $.ajax({
         url: 'http://localhost:8000/api/v1/most-viewed',
@@ -329,6 +444,6 @@ $(document).ready(function() {
         }
     });
 });
-</script>-->
+</script>
 
 </html>
