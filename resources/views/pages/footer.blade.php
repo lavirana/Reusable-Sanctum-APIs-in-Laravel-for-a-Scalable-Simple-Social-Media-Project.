@@ -349,7 +349,7 @@ $(document).ready(function() {
               const btnColor = isFollowed ? '#e53935' : '#43cea2';
 
               const userHtml = `
-                <div class="suggestion-usd" 
+               <a href="my-profile/${user.id}"><div class="suggestion-usd" 
                      data-user-id="${user.id}"
                      style="display:flex;align-items:center;margin-bottom:12px;
                             padding:10px;border-radius:8px;background:#f8f9fa;">
@@ -367,7 +367,7 @@ $(document).ready(function() {
                                  color:#fff;border:none;padding:6px 10px;border-radius:4px;">
                     ${btnText}
                   </button>
-                </div>
+                </div></a>
               `;
               $list.append(userHtml);
             });
@@ -444,6 +444,37 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+
+<script>
+$(document).ready(function() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        console.error("Token not found. Please login first.");
+        return;
+    }
+
+    $.ajax({
+        url: 'http://localhost:8000/get_user/2',
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+        },
+        success: function(res) {
+            $('#profileName').text(res.user.name);
+            if (res.user.cover_photo) {
+                $('#coverImage').attr('src', 'http://localhost:8000/' + res.user.cover_photo);
+            }
+            $('#userEmail').text(res.user.email);
+        },
+        error: function(xhr) {
+            console.error('Error fetching profile info:', xhr.responseText);
+        }
+    });
+});
+
 </script>
 
 </html>

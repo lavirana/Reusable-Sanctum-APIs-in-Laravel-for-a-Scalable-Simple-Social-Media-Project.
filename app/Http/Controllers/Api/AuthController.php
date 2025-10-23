@@ -105,9 +105,62 @@ class AuthController extends Controller
     return response()->json($users);
 }
 
+public function get_user_profile(Request $request, $id)
+{
+    // Find the user by ID from the URL
+    $user = User::find($id);
+
+    if (!$user) {
+        return response()->json([
+            'status' => false,
+            'message' => 'User not found'
+        ], 404);
+    }
+
+    // Optional: logged-in user for checking if they follow this user
+    $authUser = $request->user();
+    $isFollowing = false;
+
+    if ($authUser) {
+        $isFollowing = Follow::where('follower_id', $authUser->id)
+            ->where('followed_id', $user->id)
+            ->where('follow_status', 'followed')
+            ->exists();
+    }
+
+    // Followers and following counts for this user
+    $followersCount = Follow::where('followed_id', $user->id)
+        ->where('follow_status', 'followed')
+        ->count();
+
+    $followingCount = Follow::where('follower_id', $user->id)
+        ->where('follow_status', 'followed')
+        ->count();
+
+    return response()->json([
+        'status' => true,
+        'user' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'cover_photo' => $user->cover_photo,
+            'followers_count' => $followersCount,
+            'following_count' => $followingCount,
+            'is_following' => $isFollowing,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ]
+    ]);
+}
+
+
+
 public function allUsersExceptMe(Request $request)
 {
     $user = $request->user(); // logged-in user via Sanctum
+
+    $user->followers_count = $user->followers()->count();
+    $user->following_count = $user->following()->count();
 
     $users = User::where('id', '!=', $user->id)
         ->select('id', 'name', 'email')
@@ -127,7 +180,7 @@ public function allUsersExceptMe(Request $request)
     return response()->json([
         'status' => true,
         'total' => $users->count(),
-        'users' => $users
+        'users' => $user
     ]);
 }
 

@@ -21,19 +21,10 @@
 									Home
 								</a>
 							</li>
-							<li>
-								<a href="profiles.html" title="">
-									<span><img src="https://gambolthemes.net/workwise-new/images/icon4.png" alt=""></span>
-									Profiles
-								</a>
-								<ul style="background: linear-gradient(135deg, #43cea2, #185a9d);">
-									<li><a href="user-profile.html" title="">User Profile</a></li>
-									<li><a href="my-profile-feed.html" title="">my-profile-feed</a></li>
-								</ul>
-							</li>
+					
 						
 							<li>
-								<a href="messages" title="" class="not-box-openm">
+								<a href="/messages" title="" class="not-box-openm">
 									<span><img src="https://gambolthemes.net/workwise-new/images/icon6.png" alt=""></span>
 									Messages
 								</a>

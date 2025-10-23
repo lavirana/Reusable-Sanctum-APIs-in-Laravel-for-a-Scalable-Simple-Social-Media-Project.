@@ -1,12 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/my-profile', function () {
+Route::get('/my-profile/{id}', function () {
     return view('my_profile');
 });
 
@@ -21,3 +23,8 @@ Route::get('/messages', function () {
 Route::get('/login', function () {
     return view('login');
 });
+
+
+Route::middleware('auth:sanctum')->get('/get_user/{id}', [AuthController::class, 'get_user_profile']);
+
+Route::post('/upload-cover', [ProfileController::class, 'uploadCover'])->name('upload.cover');
