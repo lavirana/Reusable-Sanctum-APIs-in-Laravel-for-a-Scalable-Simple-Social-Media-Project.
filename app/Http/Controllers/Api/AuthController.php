@@ -159,6 +159,7 @@ public function allUsersExceptMe(Request $request)
 {
     $user = $request->user(); // logged-in user via Sanctum
 
+    
     $user->followers_count = $user->followers()->count();
     $user->following_count = $user->following()->count();
 
@@ -180,7 +181,7 @@ public function allUsersExceptMe(Request $request)
     return response()->json([
         'status' => true,
         'total' => $users->count(),
-        'users' => $user
+        'users' => $users
     ]);
 }
 

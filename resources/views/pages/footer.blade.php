@@ -337,8 +337,8 @@ $(document).ready(function() {
           'Accept': 'application/json'
         },
         success: function(res) {
+         
           $list.empty();
-
           if (res.users && res.users.length > 0) {
             res.users.forEach(function(user, index) {
               // Skip the logged-in user
@@ -475,6 +475,76 @@ $(document).ready(function() {
     });
 });
 
+</script>
+
+<script>
+$(document).ready(function() {
+    const token = localStorage.getItem('token'); // if using Sanctum
+
+    
+    window.openChat = function(receiverId) {
+        $('#receiverId').val(receiverId);
+        $('#chatBox').html('<p class="text-center text-muted">Loading messages...</p>');
+        
+        $.ajax({
+            url: `http://localhost:8000/api/messages/${receiverId}`,
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` },
+            success: function(response) {
+                const chatBox = $('#chatBox');
+                chatBox.html('');
+                response.messages.forEach(msg => {
+                    const align = msg.sender_id === {{ auth()->id() }} ? 'right' : 'left';
+                    const messageHtml = `
+                        <div class="msg ${align}">
+                            <div class="message-inner-dt">
+                                <p>${msg.message}</p>
+                            </div>
+                        </div>`;
+                    chatBox.append(messageHtml);
+                });
+                chatBox.scrollTop(chatBox[0].scrollHeight);
+            },
+            error: function(err) {
+                console.error('Error loading chat:', err);
+            }
+        });
+    };
+
+    // 👇 Send message
+    $('#sendBtn').click(function() {
+        const receiverId = $('#receiverId').val();
+        const message = $('#messageInput').val();
+
+        if (!receiverId) {
+            alert('Please select a user first!');
+            return;
+        }
+        if (!message.trim()) return;
+
+        $.ajax({
+            url: 'http://localhost:8000/api/messages/send',
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            data: { receiver_id: receiverId, message: message },
+            success: function(response) {
+                $('#chatBox').append(`
+                    <div class="msg right">
+                        <div class="message-inner-dt">
+                            <p>${message}</p>
+                        </div>
+                    </div>
+                `);
+                $('#messageInput').val('');
+                const chatBox = $('#chatBox');
+                chatBox.scrollTop(chatBox[0].scrollHeight);
+            },
+            error: function(err) {
+                console.error('Error sending message:', err);
+            }
+        });
+    });
+});
 </script>
 
 </html>

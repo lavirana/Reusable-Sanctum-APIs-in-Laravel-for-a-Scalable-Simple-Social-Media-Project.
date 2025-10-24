@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\MessageController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -38,5 +39,9 @@ Route::middleware('auth:sanctum')->group(function (){
         Route::post('/posts/{post}/like', [LikeController::class, 'toggle']);
         Route::post('/follow/{userId}', [FollowController::class, 'toggle']);
         Route::apiResource('categories', CategoryController::class)->only(['index', 'store']);
+
+        Route::get('/messages/{receiver_id}', [MessageController::class, 'getMessages']);
+        Route::get('/messages/{receiver_id}', [MessageController::class, 'fetchMessages']);
+        Route::post('/messages/send', [MessageController::class, 'sendMessage']);
 });
 
