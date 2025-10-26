@@ -4969,7 +4969,8 @@ a:hover {
 	width: 100%;
 	margin-top: 7px;
 }
-.message-inner-dt > p {
+
+/*.message-inner-dt > p {
 	float: right;
 	width: 60%;
 	background-color: #e44d3a;
@@ -4982,7 +4983,8 @@ a:hover {
 	-ms-border-radius: 15px;
 	-o-border-radius: 15px;
 	border-radius: 15px;
-}
+}*/
+
 .message-dt.st3 .message-inner-dt > p {
 	background-color: #efefef;
 	color: #686868;

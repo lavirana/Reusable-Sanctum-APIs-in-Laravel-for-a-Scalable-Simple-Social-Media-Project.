@@ -6,48 +6,34 @@
 	.message-inner-dt {
     padding: 3px;
 }
-/* Chat message wrapper */
-.messages-line {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
 
-/* Each message block */
 .msg {
   display: flex;
-  margin-bottom: 10px;
   width: 100%;
+  margin: 6px 0;
 }
 
-/* Left (received) message */
 .msg.left {
   justify-content: flex-start;
 }
 
-/* Right (sent) message */
 .msg.right {
   justify-content: flex-end;
 }
 
-/* The bubble itself */
 .message-inner-dt {
-  max-width: 70%;
   padding: 10px 14px;
   border-radius: 18px;
+  max-width: 70%;
   word-wrap: break-word;
-  font-size: 14px;
-  line-height: 1.4;
 }
 
-/* Receiver bubble */
 .msg.left .message-inner-dt {
-  background-color: #f1f0f0;
+  background: #f1f0f0;
   color: #333;
   border-top-left-radius: 0;
 }
 
-/* Sender bubble */
 .msg.right .message-inner-dt {
   background: linear-gradient(135deg, #43cea2, #185a9d);
   color: #fff;

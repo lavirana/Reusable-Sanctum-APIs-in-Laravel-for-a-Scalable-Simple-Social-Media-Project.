@@ -482,61 +482,74 @@ $(document).ready(function() {
 <script>
 $(document).ready(function () {
   const token = localStorage.getItem('token');
-  const userId = "{{ auth()->id() }}"; // Logged-in user
-  const baseUrl = "http://localhost:8000/api";
+  let loggedInUserId = null;
+  let selectedReceiverId = null;
 
-  // Load all users
-  $.ajax({
-    url: `${baseUrl}/v1/all_users`,
-    method: 'GET',
-    headers: { Authorization: `Bearer ${token}` },
-    success: function (response) {
-      const userList = $('#userList');
-      userList.empty();
+  // Step 1: Load logged-in user
+  function getLoggedInUser() {
+    return $.ajax({
+      url: 'http://localhost:8000/api/user',
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+  }
 
-      response.users.forEach(function (user) {
-        if (user.id != userId) {
-          const html = `
-            <li onclick="openChat(${user.id}, '${user.name}', '${user.profile_photo_url || 'https://via.placeholder.com/50'}')" style="cursor:pointer;">
-              <div class="usr-msg-details">
-                <div class="usr-ms-img">
-                  <img src="${user.profile_photo_url || 'https://via.placeholder.com/50'}" alt="">
+  // Step 2: Load user list
+  function loadUsers() {
+    $.ajax({
+      url: 'http://localhost:8000/api/v1/all_users',
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+      success: function (response) {
+        const userList = $('#userList');
+        userList.empty();
+
+        response.users.forEach(user => {
+          if (user.id !== loggedInUserId) {
+            userList.append(`
+              <li class="user-item" data-id="${user.id}" style="cursor:pointer;">
+                <div class="usr-msg-details">
+                  <div class="usr-ms-img">
+                    <img src="${user.profile_photo_url || 'https://via.placeholder.com/50'}" alt="">
+                  </div>
+                  <div class="usr-mg-info">
+                    <h3>${user.name}</h3>
+                    <p>${user.email}</p>
+                  </div>
                 </div>
-                <div class="usr-mg-info">
-                  <h3>${user.name}</h3>
-                  <p>${user.email}</p>
-                </div>
-              </div>
-            </li>`;
-          userList.append(html);
-        }
-      });
-    },
-    error: function () {
-      console.error("Error loading users.");
+              </li>
+            `);
+          }
+        });
+      },
+      error: function (err) {
+        console.error('Error loading users:', err);
+      }
+    });
+  }
+
+  // Step 3: Load messages between logged-in user and receiver
+  function loadMessages(receiverId) {
+    if (!loggedInUserId) {
+      console.warn("User not yet loaded...");
+      return;
     }
-  });
-
-  // Open chat window
-  window.openChat = function (receiverId, userName, userImg) {
-    $('#receiverId').val(receiverId);
-    $('#chatUserName').text(userName);
-    $('#chatUserImg').attr('src', userImg);
-    $('#chatBox').html('<p class="text-center text-muted">Loading messages...</p>');
-
-    // Update URL without reloading page
-    window.history.pushState({}, '', `/messages/${receiverId}`);
 
     $.ajax({
-      url: `${baseUrl}/messages/${receiverId}`,
+      url: `http://localhost:8000/api/messages/${receiverId}`,
       method: 'GET',
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { 'Authorization': `Bearer ${token}` },
       success: function (response) {
         const chatBox = $('#chatBox');
         chatBox.empty();
 
-        response.messages.forEach(function (msg) {
-          const align = parseInt(msg.sender_id) === parseInt(userId) ? 'right' : 'left';
+        if (!response.messages || response.messages.length === 0) {
+          chatBox.html('<p class="text-center text-muted">No messages yet</p>');
+          return;
+        }
+
+        response.messages.forEach(msg => {
+          const align = (msg.sender_id === loggedInUserId) ? 'right' : 'left';
           const html = `
             <div class="msg ${align}">
               <div class="message-inner-dt"><p>${msg.message}</p></div>
@@ -546,42 +559,62 @@ $(document).ready(function () {
 
         chatBox.scrollTop(chatBox[0].scrollHeight);
       },
-      error: function () {
-        console.error("Error loading chat messages.");
+      error: function (err) {
+        console.error('Error loading messages:', err);
       }
     });
-  };
+  }
 
-  // Send message
-  $('#sendMessageForm').submit(function (e) {
+  // Step 4: Handle user click (open chat)
+  $(document).on('click', '.user-item', function () {
+    selectedReceiverId = $(this).data('id');
+    const userName = $(this).find('h3').text();
+    const userImg = $(this).find('img').attr('src');
+
+    $('#chatUserName').text(userName);
+    $('#chatUserImg').attr('src', userImg);
+    $('#receiverId').val(selectedReceiverId);
+
+    loadMessages(selectedReceiverId);
+  });
+
+  // Step 5: Send message
+  $('#sendMessageForm').on('submit', function (e) {
     e.preventDefault();
-    const receiverId = $('#receiverId').val();
     const message = $('#messageInput').val().trim();
 
-    if (!receiverId) return alert('Please select a user first!');
+    if (!selectedReceiverId) return alert('Please select a user first!');
     if (!message) return;
 
     $.ajax({
-      url: `${baseUrl}/messages/send`,
+      url: 'http://localhost:8000/api/messages/send',
       method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-      data: { receiver_id: receiverId, message: message },
+      headers: { 'Authorization': `Bearer ${token}` },
+      data: { receiver_id: selectedReceiverId, message },
       success: function () {
-        const html = `
+        $('#chatBox').append(`
           <div class="msg right">
             <div class="message-inner-dt"><p>${message}</p></div>
-          </div>`;
-        $('#chatBox').append(html);
+          </div>
+        `);
         $('#messageInput').val('');
         $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
       },
-      error: function () {
-        console.error("Error sending message.");
+      error: function (err) {
+        console.error('Error sending message:', err);
       }
     });
   });
+
+  // Step 6: Initialize everything
+  getLoggedInUser().done(user => {
+    loggedInUserId = user.id;
+    console.log("Logged-in ID:", loggedInUserId);
+    loadUsers();
+  }).fail(err => {
+    console.error("Error fetching user info:", err);
+  });
 });
 </script>
-
 
 </html>
