@@ -22,9 +22,17 @@ Route::get('/messages', function () {
 
 Route::get('/login', function () {
     return view('login');
-});
+})->name('login');
+
 
 
 Route::middleware('auth:sanctum')->get('/get_user/{id}', [AuthController::class, 'get_user_profile']);
 
 Route::post('/upload-cover', [ProfileController::class, 'uploadCover'])->name('upload.cover');
+
+
+
+
+Route::get('/messages/{receiverId?}', function ($receiverId = null) {
+    return view('messages', ['receiverId' => $receiverId]);
+});

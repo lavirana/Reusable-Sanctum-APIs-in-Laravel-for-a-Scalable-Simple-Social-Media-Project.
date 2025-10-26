@@ -103,6 +103,7 @@
 					<div class="col-lg-12">
 						<textarea name="description" placeholder="Description" id="post_body"></textarea>
 					</div>
+					<input type="hidden" id="receiverId">
 					<div class="col-lg-12">
 						<ul>
 							<li>

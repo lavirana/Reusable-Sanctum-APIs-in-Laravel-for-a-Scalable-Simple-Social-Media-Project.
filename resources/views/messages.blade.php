@@ -1,136 +1,113 @@
 @extends('pages.layout')
-
+@section('title', 'Messages')
 @section('content')
 
-@section('title', 'Messages')
-
 <style>
-	.message-inner-dt > p {
-    background: linear-gradient(135deg, #43cea2, #185a9d);
+	.message-inner-dt {
+    padding: 3px;
 }
-.message-dt.st3 .message-inner-dt > p {
-    color: #fff;
+/* Chat message wrapper */
+.messages-line {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
 }
+
+/* Each message block */
+.msg {
+  display: flex;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+/* Left (received) message */
+.msg.left {
+  justify-content: flex-start;
+}
+
+/* Right (sent) message */
+.msg.right {
+  justify-content: flex-end;
+}
+
+/* The bubble itself */
+.message-inner-dt {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  word-wrap: break-word;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Receiver bubble */
+.msg.left .message-inner-dt {
+  background-color: #f1f0f0;
+  color: #333;
+  border-top-left-radius: 0;
+}
+
+/* Sender bubble */
+.msg.right .message-inner-dt {
+  background: linear-gradient(135deg, #43cea2, #185a9d);
+  color: #fff;
+  border-top-right-radius: 0;
+}
+
 </style>
-
 <section class="messages-page">
-			<div class="container">
-				<div class="messages-sec">
-					<div class="row">
-						<div class="col-lg-4 col-md-12 no-pdd">
-							<div class="msgs-list">
-								<div class="msg-title">
-									<h3>Messages</h3>
-									<ul>
-										<li><a href="#" title=""><i class="fa fa-cog"></i></a></li>
-										<li><a href="#" title=""><i class="fa fa-ellipsis-v"></i></a></li>
-									</ul>
-								</div><!--msg-title end-->
-								<div class="messages-list">
-									<ul>
-										<li class="active">
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="https://gambolthemes.net/workwise-new/images/resources/m-img1.png" alt="">
-													<span class="msg-status"></span>
-												</div>
-												<div class="usr-mg-info">
-													<h3>John Doe</h3>
-													<p>Lorem ipsum dolor <img src="https://gambolthemes.net/workwise-new/images/smley.png" alt=""></p>
-												</div><!--usr-mg-info end-->
-												<span class="posted_time">1:55 PM</span>
-												<span class="msg-notifc">1</span>
-											</div><!--usr-msg-details end-->
-										</li>
-										<li>
-											<div class="usr-msg-details">
-												<div class="usr-ms-img">
-													<img src="https://gambolthemes.net/workwise-new/images/resources/m-img2.png" alt="">
-												</div>
-												<div class="usr-mg-info">
-													<h3>David Vane</h3>
-													<p>Vestibulum ac diam..</p>
-												</div><!--usr-mg-info end-->
-												<span class="posted_time">1:55 PM</span>
-											</div><!--usr-msg-details end-->
-										</li>
-									
-									</ul>
-								</div><!--messages-list end-->
-							</div><!--msgs-list end-->
-						</div>
-						<div class="col-lg-8 col-md-12 pd-right-none pd-left-none">
-							<div class="main-conversation-box">
-								<div class="message-bar-head">
-									<div class="usr-msg-details">
-										<div class="usr-ms-img">
-											<img src="https://gambolthemes.net/workwise-new/images/resources/m-img1.png" alt="">
-										</div>
-										<div class="usr-mg-info">
-											<h3>John Doe</h3>
-											<p>Online</p>
-										</div><!--usr-mg-info end-->
-									</div>
-									<a href="#" title=""><i class="fa fa-ellipsis-v"></i></a>
-								</div><!--message-bar-head end-->
-								<div class="messages-line">
-									<div class="main-message-box">
-										<div class="messg-usr-img">
-											<img src="https://gambolthemes.net/workwise-new/images/resources/m-img1.png" alt="">
-										</div><!--messg-usr-img end-->
-										
-									</div><!--main-message-box end-->
-									<br>
-									<br>
-									<br>
-									<br>
-									<br>
-									<br>
-									<div class="main-message-box ta-right">
-										<div class="message-dt">
-											<div class="message-inner-dt">
-												<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum congue leo eget malesuada. Vivamus suscipit tortor eget felis porttitor.</p>
-											</div><!--message-inner-dt end-->
-											<span>Sat, Aug 23, 1:08 PM</span>
-										</div><!--message-dt end-->
-										<div class="messg-usr-img">
-											<img src="https://gambolthemes.net/workwise-new/images/resources/m-img2.png" alt="">
-										</div><!--messg-usr-img end-->
-									</div><!--main-message-box end-->
-									<div class="main-message-box st3">
-										<div class="message-dt st3">
-											<div class="message-inner-dt">
-												<p>Cras ultricies ligula.<img src="https://gambolthemes.net/workwise-new/images/smley.png" alt=""></p>
-											</div><!--message-inner-dt end-->
-											<span>5 minutes ago</span>
-										</div><!--message-dt end-->
-										<div class="messg-usr-img">
-											<img src="https://gambolthemes.net/workwise-new/images/resources/m-img1.png" alt="">
-										</div><!--messg-usr-img end-->
-									</div><!--main-message-box end-->
-									
-								</div><!--messages-line end-->
-								<div class="message-send-area">
-									<form>
-										<div class="mf-field">
-											<input type="text" name="message" placeholder="Type a message here">
-											<button type="submit"  style="background: linear-gradient(135deg, #43cea2, #185a9d);">Send</button>
-										</div>
-										<ul>
-											<li><a href="#" title=""><i class="fas fa-smile"></i></a></li>
-											<li><a href="#" title=""><i class="fas fa-camera"></i></a></li>
-											<li><a href="#" title=""><i class="fas fa-paperclip"></i></a></li>
-										</ul>
-									</form>
-								</div><!--message-send-area end-->
-							</div><!--main-conversation-box end-->
-						</div>
-					</div>
-				</div><!--messages-sec end-->
-			</div>
-		</section><!--messages-page end-->
+  <div class="container">
+    <div class="messages-sec row">
+      
+      <!-- USERS LIST -->
+      <div class="col-lg-4 col-md-12 no-pdd">
+        <div class="msgs-list">
+          <div class="msg-title">
+            <h3>Messages</h3>
+          </div>
+          <div class="messages-list">
+            <ul id="userList">
+              <!-- Will load dynamically -->
+            </ul>
+          </div>
+        </div>
+      </div>
 
+      <!-- CHAT WINDOW -->
+      <div class="col-lg-8 col-md-12 pd-right-none pd-left-none">
+        <div class="main-conversation-box">
+          <div class="message-bar-head">
+            <div class="usr-msg-details">
+              <div class="usr-ms-img">
+                <img id="chatUserImg" src="https://via.placeholder.com/50" alt="">
+              </div>
+              <div class="usr-mg-info">
+                <h3 id="chatUserName">Select a user</h3>
+                <p id="chatUserStatus">Online</p>
+              </div>
+            </div>
+          </div>
 
+          <!-- CHAT MESSAGES -->
+          <div class="messages-line" id="chatBox" style="height:350px; overflow-y:auto; margin-top:13%">
+            <p class="text-center text-muted mt-3">Select a user to start chatting</p>
+          </div>
+
+          <!-- MESSAGE INPUT -->
+          <div class="message-send-area">
+            <form id="sendMessageForm">
+			<input type="hidden" id="receiverId" value="">
+              <div class="mf-field">
+                <input type="text" id="messageInput" placeholder="Type a message here">
+                <button type="submit" id="sendBtn" style="background: linear-gradient(135deg,#43cea2,#185a9d);">Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 @endsection
-

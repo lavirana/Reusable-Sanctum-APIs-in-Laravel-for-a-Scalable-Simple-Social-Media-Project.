@@ -361,12 +361,14 @@ $(document).ready(function() {
                   <div style="flex:1;margin-left:10px;">
                     <h4 style="margin:0;font-size:15px;">${user.name}</h4>
                   </div>
+                  <a href="{{ url('/messages/${user.id}') }}" class="btn btn-primary">Message</a>
                   <button class="btn-sm btn-follow" 
                           data-status="${isFollowed ? 'followed' : 'unfollowed'}"
                           style="background:linear-gradient(135deg,${btnColor},#185a9d);
                                  color:#fff;border:none;padding:6px 10px;border-radius:4px;">
                     ${btnText}
                   </button>
+                  
                 </div></a>
               `;
               $list.append(userHtml);
@@ -478,73 +480,108 @@ $(document).ready(function() {
 </script>
 
 <script>
-$(document).ready(function() {
-    const token = localStorage.getItem('token'); // if using Sanctum
+$(document).ready(function () {
+  const token = localStorage.getItem('token');
+  const userId = "{{ auth()->id() }}"; // Logged-in user
+  const baseUrl = "http://localhost:8000/api";
 
-    
-    window.openChat = function(receiverId) {
-        $('#receiverId').val(receiverId);
-        $('#chatBox').html('<p class="text-center text-muted">Loading messages...</p>');
-        
-        $.ajax({
-            url: `http://localhost:8000/api/messages/${receiverId}`,
-            method: 'GET',
-            headers: { 'Authorization': `Bearer ${token}` },
-            success: function(response) {
-                const chatBox = $('#chatBox');
-                chatBox.html('');
-                response.messages.forEach(msg => {
-                    const align = msg.sender_id === {{ auth()->id() }} ? 'right' : 'left';
-                    const messageHtml = `
-                        <div class="msg ${align}">
-                            <div class="message-inner-dt">
-                                <p>${msg.message}</p>
-                            </div>
-                        </div>`;
-                    chatBox.append(messageHtml);
-                });
-                chatBox.scrollTop(chatBox[0].scrollHeight);
-            },
-            error: function(err) {
-                console.error('Error loading chat:', err);
-            }
-        });
-    };
+  // Load all users
+  $.ajax({
+    url: `${baseUrl}/v1/all_users`,
+    method: 'GET',
+    headers: { Authorization: `Bearer ${token}` },
+    success: function (response) {
+      const userList = $('#userList');
+      userList.empty();
 
-    // 👇 Send message
-    $('#sendBtn').click(function() {
-        const receiverId = $('#receiverId').val();
-        const message = $('#messageInput').val();
-
-        if (!receiverId) {
-            alert('Please select a user first!');
-            return;
+      response.users.forEach(function (user) {
+        if (user.id != userId) {
+          const html = `
+            <li onclick="openChat(${user.id}, '${user.name}', '${user.profile_photo_url || 'https://via.placeholder.com/50'}')" style="cursor:pointer;">
+              <div class="usr-msg-details">
+                <div class="usr-ms-img">
+                  <img src="${user.profile_photo_url || 'https://via.placeholder.com/50'}" alt="">
+                </div>
+                <div class="usr-mg-info">
+                  <h3>${user.name}</h3>
+                  <p>${user.email}</p>
+                </div>
+              </div>
+            </li>`;
+          userList.append(html);
         }
-        if (!message.trim()) return;
+      });
+    },
+    error: function () {
+      console.error("Error loading users.");
+    }
+  });
 
-        $.ajax({
-            url: 'http://localhost:8000/api/messages/send',
-            method: 'POST',
-            headers: { 'Authorization': `Bearer ${token}` },
-            data: { receiver_id: receiverId, message: message },
-            success: function(response) {
-                $('#chatBox').append(`
-                    <div class="msg right">
-                        <div class="message-inner-dt">
-                            <p>${message}</p>
-                        </div>
-                    </div>
-                `);
-                $('#messageInput').val('');
-                const chatBox = $('#chatBox');
-                chatBox.scrollTop(chatBox[0].scrollHeight);
-            },
-            error: function(err) {
-                console.error('Error sending message:', err);
-            }
+  // Open chat window
+  window.openChat = function (receiverId, userName, userImg) {
+    $('#receiverId').val(receiverId);
+    $('#chatUserName').text(userName);
+    $('#chatUserImg').attr('src', userImg);
+    $('#chatBox').html('<p class="text-center text-muted">Loading messages...</p>');
+
+    // Update URL without reloading page
+    window.history.pushState({}, '', `/messages/${receiverId}`);
+
+    $.ajax({
+      url: `${baseUrl}/messages/${receiverId}`,
+      method: 'GET',
+      headers: { Authorization: `Bearer ${token}` },
+      success: function (response) {
+        const chatBox = $('#chatBox');
+        chatBox.empty();
+
+        response.messages.forEach(function (msg) {
+          const align = parseInt(msg.sender_id) === parseInt(userId) ? 'right' : 'left';
+          const html = `
+            <div class="msg ${align}">
+              <div class="message-inner-dt"><p>${msg.message}</p></div>
+            </div>`;
+          chatBox.append(html);
         });
+
+        chatBox.scrollTop(chatBox[0].scrollHeight);
+      },
+      error: function () {
+        console.error("Error loading chat messages.");
+      }
     });
+  };
+
+  // Send message
+  $('#sendMessageForm').submit(function (e) {
+    e.preventDefault();
+    const receiverId = $('#receiverId').val();
+    const message = $('#messageInput').val().trim();
+
+    if (!receiverId) return alert('Please select a user first!');
+    if (!message) return;
+
+    $.ajax({
+      url: `${baseUrl}/messages/send`,
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      data: { receiver_id: receiverId, message: message },
+      success: function () {
+        const html = `
+          <div class="msg right">
+            <div class="message-inner-dt"><p>${message}</p></div>
+          </div>`;
+        $('#chatBox').append(html);
+        $('#messageInput').val('');
+        $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
+      },
+      error: function () {
+        console.error("Error sending message.");
+      }
+    });
+  });
 });
 </script>
+
 
 </html>
