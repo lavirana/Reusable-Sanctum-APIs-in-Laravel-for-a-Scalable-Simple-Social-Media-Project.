@@ -6,6 +6,8 @@
 <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 </body>
 <script>
+
+const BASE_URL = "http://127.0.0.1:8001"; 
 document.addEventListener('DOMContentLoaded', function () {
   axios.defaults.baseURL = '/api';
   const token = localStorage.getItem('token');
@@ -30,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <div class="card mb-3" id="post-${p.id}">
         <div class="card-body" style="padding:10px;">
           <div class="d-flex align-items-center mb-2">
-            <img src="http://localhost:8000/images/lavi.jpg" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
+            <img src="${BASE_URL}/images/lavi.jpg" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
             <strong>${escapeHtml(p.user?.name || 'Unknown')}</strong>
           </div>
           <h5>${escapeHtml(p.title)}</h5>
@@ -142,7 +144,7 @@ const token = localStorage.getItem('token');
 // Logout request
 async function logout() {
   try {
-    await axios.post('http://localhost:8000/api/logout', {}, {
+    await axios.post('${BASE_URL}/api/logout', {}, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -215,7 +217,7 @@ $(document).ready(function() {
 
   // Step 1: Get logged-in user info
   $.ajax({
-    url: 'http://localhost:8000/api/v1/me',
+    url: `${BASE_URL}/api/v1/me`,
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -255,7 +257,7 @@ $(document).ready(function() {
     $btn.prop('disabled', true).text('Please wait...');
 
     $.ajax({
-      url: `http://localhost:8000/api/follow/${userId}`,
+      url: `${BASE_URL}/api/follow/${userId}`,
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -281,7 +283,7 @@ $(document).ready(function() {
 
     const token = localStorage.getItem('token'); // Sanctum token
     $.ajax({
-        url: '/api/v1/me',
+        url: `${BASE_URL}/api/v1/me`,
         type: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -295,7 +297,7 @@ $(document).ready(function() {
             $('.following').text(res.following_count);
             
             if (res.profile_photo) {
-                $('.usr-pic img').attr('src', 'http://localhost:8000/images/' + res.profile_photo);
+                $('.usr-pic img').attr('src', "${BASE_URL}/images/" + res.profile_photo);
             }
         },
         error: function(xhr) {
@@ -319,7 +321,7 @@ $(document).ready(function() {
 
   // Fetch logged-in user info first
   $.ajax({
-    url: 'http://localhost:8000/api/v1/me',
+    url: `${BASE_URL}/api/v1/me`,
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -330,7 +332,7 @@ $(document).ready(function() {
 
       // Fetch all users except logged-in one
       $.ajax({
-        url: 'http://localhost:8000/api/v1/all_users',
+        url: `${BASE_URL}/api/v1/all_users`,
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -354,7 +356,7 @@ $(document).ready(function() {
                      style="display:flex;align-items:center;margin-bottom:12px;
                             padding:10px;border-radius:8px;background:#f8f9fa;">
                   <img src="${user.profile_photo_path 
-                              ? 'http://localhost:8000/' + user.profile_photo_path 
+                              ? `${BASE_URL}/` + user.profile_photo_path 
                               : 'https://i.pravatar.cc/60?img=' + (index + 1)}"
                        alt="${user.name}" 
                        style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
@@ -397,7 +399,7 @@ $(document).ready(function() {
     $btn.prop('disabled', true).text('Please wait...');
 
     $.ajax({
-      url: `http://localhost:8000/api/follow/${userId}`,
+      url: `${BASE_URL}/api/follow/${userId}`,
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -427,7 +429,7 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
     $.ajax({
-        url: 'http://localhost:8000/api/v1/most-viewed',
+        url: `${BASE_URL}/api/v1/most-viewed`,
         type: 'GET',
         success: function(res) {
             let html = '';
@@ -450,6 +452,8 @@ $(document).ready(function() {
 
 <script>
 $(document).ready(function() {
+// Ye jQuery ka special function hai. Matlab: “wait karo tab tak jab tak pura HTML page load na ho jaye, phir JS execute karo.” Agar tum JS ko turant run karte ho bina wait kiye, toh ho sakta hai ki DOM elements (jaise #userList ya #chatBox) abhi exist na karein → JS error aayega. //
+
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -458,7 +462,7 @@ $(document).ready(function() {
     }
 
     $.ajax({
-        url: 'http://localhost:8000/get_user/2',
+        url: `${BASE_URL}/get_user/2`,
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -467,7 +471,7 @@ $(document).ready(function() {
         success: function(res) {
             $('#profileName').text(res.user.name);
             if (res.user.cover_photo) {
-                $('#coverImage').attr('src', 'http://localhost:8000/' + res.user.cover_photo);
+                $('#coverImage').attr('src', `${BASE_URL}` + res.user.cover_photo);
             }
             $('#userEmail').text(res.user.email);
         },
@@ -488,7 +492,7 @@ $(document).ready(function () {
   // Step 1: Load logged-in user
   function getLoggedInUser() {
     return $.ajax({
-      url: 'http://localhost:8000/api/user',
+      url: `${BASE_URL}/api/user`,
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     });
@@ -497,7 +501,7 @@ $(document).ready(function () {
   // Step 2: Load user list
   function loadUsers() {
     $.ajax({
-      url: 'http://localhost:8000/api/v1/all_users',
+      url: `${BASE_URL}/api/v1/all_users`,
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
       success: function (response) {
@@ -536,7 +540,7 @@ $(document).ready(function () {
     }
 
     $.ajax({
-      url: `http://localhost:8000/api/messages/${receiverId}`,
+      url: `${BASE_URL}/api/messages/${receiverId}`,
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
       success: function (response) {
@@ -587,7 +591,7 @@ $(document).ready(function () {
     if (!message) return;
 
     $.ajax({
-      url: 'http://localhost:8000/api/messages/send',
+      url: `${BASE_URL}/api/messages/send`,
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
       data: { receiver_id: selectedReceiverId, message },
