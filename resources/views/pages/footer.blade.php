@@ -351,28 +351,29 @@ $(document).ready(function() {
               const btnColor = isFollowed ? '#e53935' : '#43cea2';
 
               const userHtml = `
-               <a href="my-profile/${user.id}"><div class="suggestion-usd" 
-                     data-user-id="${user.id}"
-                     style="display:flex;align-items:center;margin-bottom:12px;
-                            padding:10px;border-radius:8px;background:#f8f9fa;">
-                  <img src="${user.profile_photo_path 
-                              ? `${BASE_URL}/` + user.profile_photo_path 
-                              : 'https://i.pravatar.cc/60?img=' + (index + 1)}"
-                       alt="${user.name}" 
-                       style="border-radius:50%;width:50px;height:50px;object-fit:cover;">
-                  <div style="flex:1;margin-left:10px;">
-                    <h4 style="margin:0;font-size:15px;">${user.name}</h4>
-                  </div>
-                  <a href="{{ url('/messages/${user.id}') }}" class="btn-sm btn-primary" style="background: linear-gradient(135deg, #43cea2, #185a9d);">Message</a>&nbsp
-                  <button class="btn-sm btn-follow" 
-                          data-status="${isFollowed ? 'followed' : 'unfollowed'}"
-                          style="background:linear-gradient(135deg,${btnColor},#185a9d);
-                                 color:#fff;border:none;border-radius:4px;">
-                    ${btnText}
-                  </button>
-                  
-                </div></a>
-              `;
+              <a href="profile-detail/${user.id}">
+  <div class="suggestion-usd" data-user-id="${user.id}">
+    <!-- Left: Profile Info -->
+    <div class="user-info">
+      <img 
+        src="${user.profile_photo_path 
+                ? `${BASE_URL}/` + user.profile_photo_path 
+                : 'https://i.pravatar.cc/60?img=' + (index + 1)}"
+        alt="${user.name}">
+      <h4>${user.name}</h4>
+    </div>
+    <!-- Right: Actions -->
+    <div class="user-actions">
+      <a href="http://127.0.0.1:8001/messages/${user.id}" class="btn btn-message" style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff;">Message</a>
+      <button style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff; " class="btn btn-follow" 
+              data-status="${isFollowed ? 'followed' : 'unfollowed'}" 
+              style="--btn-color:${btnColor};">
+        ${btnText}
+      </button>
+    </div>
+
+  </div>
+</a>`;
               $list.append(userHtml);
             });
           } else {

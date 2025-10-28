@@ -8,9 +8,7 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/my-profile/{id}', function () {
-    return view('my_profile');
-});
+
 
 Route::get('/all-profile', function () {
     return view('all_profiles');
@@ -30,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/get_user/{id}', [AuthController::class,
 
 Route::post('/upload-cover', [ProfileController::class, 'uploadCover'])->name('upload.cover');
 
+Route::get('/profile-detail/{id}', [ProfileController::class, 'index']);
 
 
 

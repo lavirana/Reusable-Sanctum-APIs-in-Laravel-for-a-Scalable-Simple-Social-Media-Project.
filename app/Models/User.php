@@ -81,6 +81,10 @@ public function profileViews()
     return $this->hasMany(ProfileView::class, 'viewed_user_id');
 }
 
+public function socialLinks()
+{
+    return $this->hasOne(user_social::class);
 
+}
 
 }

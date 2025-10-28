@@ -36,6 +36,11 @@
 <section class="cover-sec">
 <img id="coverImage"  alt="Cover Image">
 
+<!---@if($user->cover_photo)
+    <img src="{{ asset($user->cover_photo) }}" alt="Cover Photo" width="200">
+@else
+    <p>No cover photo uploaded</p>
+@endif-->
 
     <div class="add-pic-box">
         <div class="container">
@@ -70,16 +75,22 @@
                                 </div>
                                 <div class="user_pro_status">
                                     <ul class="flw-status">
-                                        <li><span>Following</span><b>34</b></li>
-                                        <li><span>Followers</span><b>155</b></li>
+                                        <li><span>Following</span><b>{{ $user->following->count() }}</b></li>
+                                        <li><span>Followers</span><b>{{ $user->followers->count() }}</b></li>
                                        
                                     </ul>
                                 </div>
+                                @if($user->socialLinks)
                                 <ul class="social_links">
-                                    <li><a href="#" title=""><i class="la la-globe"></i> https://thetechinfo.net/</a></li>
-                                    <li><a href="#" title=""><i class="fa fa-facebook-square"></i> http://facebook.com/john</a></li>
-                                    <li><a href="#" title=""><i class="fa fa-twitter"></i> http://twitter.com/john</a></li>
+                                    
+<li><a href="{{ $user->socialLinks->site_link }}" title=""><i class="la la-globe"></i> {{ $user->socialLinks->site_link }}</a></li>
+<li><a href="{{ $user->socialLinks->face_link }}" title=""><i class="fa fa-facebook-square"></i> {{ $user->socialLinks->face_link }}</a></li>
+<li><a href="{{ $user->socialLinks->x_link }}" title=""><i class="fa fa-twitter"></i> {{ $user->socialLinks->x_link }}</a></li>
+<li><a href="{{ $user->socialLinks->insta_link }}" title=""><i class="fa fa-instagram"></i>{{ $user->socialLinks->insta_link }}</a></li>
                                 </ul>
+                                @else
+    <p>No social links available.</p>
+@endif
                                 <ul class="user-fw-status">
 								
 									<li>
@@ -94,27 +105,45 @@
                         <div class="main-ws-sec">
                             <div class="product-feed-tab current" id="feed-dd">
                                 <div class="posts-section">
+
+                    @if($user->posts->isEmpty())
+                    <div class="post-bar">
+    <p>No posts available.</p>  
+</div>
+@endif
+                
+                                @foreach($user->posts as $post)
+
                                     <div class="post-bar">
                                         <div class="post_topbar">
                                             <div class="usy-dt">
                                             <img src="/images/lavi.jpg" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
                                                 <div class="usy-name">
-                                                    <h3 id="profileName"></h3>
+                                                    <h3>Ashish Rana</h3>
                                                     <span><img src="https://gambolthemes.net/workwise-new/images/clock.png" alt="">3 min ago</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="job_descp">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                                            <p>{{ $post->body }}</p>
                                         </div>
                                         <div class="job-status-bar">
                                             <ul class="like-com">
                                                 <li><a href="#"><i class="fas fa-heart"></i> Like</a></li>
                                                 <li><a href="#" class="com" style="top: 0px;"><i class="fas fa-comment-alt"></i> Comment 15</a></li>
+                                                <div class="comments">
+            @foreach($post->comments as $comment)
+                <p><strong>{{ $comment->user->name }}:</strong> {{ $comment->text }}</p>
+            @endforeach
+        </div>
                                             </ul>
-                                            <a href="#"><i class="fas fa-eye"></i>Views 50</a>
+                                           
                                         </div>
                                     </div>
+
+@endforeach
+
+
                                 </div>
                             </div>
                         </div>
@@ -130,8 +159,8 @@
                                 <div class="suggestion-usd">
                                     <img src="https://gambolthemes.net/workwise-new/images/resources/s1.png" alt="">
                                     <div class="sgt-text">
-                                        <h4>Jessica William</h4>
-                                        <span>Graphic Designer</span>
+                                        <h4>Reetika Rajput</h4>
+                                       
                                     </div>
                                     <span><i class="la la-plus"></i></span>
                                 </div>

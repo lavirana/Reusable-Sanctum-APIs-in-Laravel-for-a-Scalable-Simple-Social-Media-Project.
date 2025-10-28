@@ -36,7 +36,7 @@
 										<span class="followers"></span>
 									</li>
 									<li>
-										<a href="#" title="" style="color: #185a9d;">View Profile</a>
+										<a href="profile-detail/2" title="" style="color: #185a9d;">View Profile</a>
 									</li>
 								</ul>
 							</div><!--user-data end-->
