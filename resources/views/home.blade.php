@@ -46,7 +46,7 @@
 						<div class="main-ws-sec">
 							<div class="post-topbar" style="border-top: 4px solid #43cea2;">
 								<div class="user-picy">
-									<img src="http://localhost:8000/images/lavi.jpg" alt="" style="border-radius: 30px;;">
+									<img src="/images/lavi.jpg" alt="" style="border-radius: 30px;">
 								</div>
 								<div class="post-st">
 									<ul>

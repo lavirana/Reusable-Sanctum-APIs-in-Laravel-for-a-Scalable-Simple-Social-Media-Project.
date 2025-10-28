@@ -363,11 +363,11 @@ $(document).ready(function() {
                   <div style="flex:1;margin-left:10px;">
                     <h4 style="margin:0;font-size:15px;">${user.name}</h4>
                   </div>
-                  <a href="{{ url('/messages/${user.id}') }}" class="btn btn-primary">Message</a>
+                  <a href="{{ url('/messages/${user.id}') }}" class="btn-sm btn-primary" style="background: linear-gradient(135deg, #43cea2, #185a9d);">Message</a>&nbsp
                   <button class="btn-sm btn-follow" 
                           data-status="${isFollowed ? 'followed' : 'unfollowed'}"
                           style="background:linear-gradient(135deg,${btnColor},#185a9d);
-                                 color:#fff;border:none;padding:6px 10px;border-radius:4px;">
+                                 color:#fff;border:none;border-radius:4px;">
                     ${btnText}
                   </button>
                   
@@ -471,7 +471,7 @@ $(document).ready(function() {
         success: function(res) {
             $('#profileName').text(res.user.name);
             if (res.user.cover_photo) {
-                $('#coverImage').attr('src', `${BASE_URL}` + res.user.cover_photo);
+                $('#coverImage').attr('src', `${BASE_URL}/` + res.user.cover_photo);
             }
             $('#userEmail').text(res.user.email);
         },

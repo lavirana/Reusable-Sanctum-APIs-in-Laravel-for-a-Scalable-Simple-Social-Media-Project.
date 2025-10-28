@@ -42,7 +42,7 @@
 					</div><!--menu-btn end-->
 					<div class="user-account" style="border-left: #185a9d; border-right: #185a9d">
 						<div class="user-info">
-							<img src="http://localhost:8000/images/lavi.jpg" alt="" style="width: 27px;">
+							<img src="/images/lavi.jpg" alt="" style="width: 27px;">
 							<a href="#" title="">Ashish</a>
 							<i class="la la-sort-down"></i>
 						</div>

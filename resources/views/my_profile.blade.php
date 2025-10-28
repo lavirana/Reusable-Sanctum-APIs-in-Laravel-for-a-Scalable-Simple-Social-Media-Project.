@@ -62,7 +62,7 @@
                         <div class="main-left-sidebar">
                             <div class="user_profile">
                                 <div class="user-pro-img">
-                                    <img id="profileImage">
+                                    <img src="http://127.0.0.1:8001/images/lavi.jpg" id="profileImage">
                                     <div class="add-dp" id="OpenImgUpload">
                                         <input type="file" id="file">
                                         <label for="file"><i class="fas fa-camera"></i></label>
@@ -72,13 +72,20 @@
                                     <ul class="flw-status">
                                         <li><span>Following</span><b>34</b></li>
                                         <li><span>Followers</span><b>155</b></li>
+                                       
                                     </ul>
                                 </div>
                                 <ul class="social_links">
-                                    <li><a href="#" title=""><i class="la la-globe"></i> www.example.com</a></li>
+                                    <li><a href="#" title=""><i class="la la-globe"></i> https://thetechinfo.net/</a></li>
                                     <li><a href="#" title=""><i class="fa fa-facebook-square"></i> http://facebook.com/john</a></li>
                                     <li><a href="#" title=""><i class="fa fa-twitter"></i> http://twitter.com/john</a></li>
                                 </ul>
+                                <ul class="user-fw-status">
+								
+									<li>
+										<a href="#" title="" style="color: #185a9d;">Edit Profile</a>
+									</li>
+								</ul>
                             </div>
                         </div>
                     </div>
@@ -90,7 +97,7 @@
                                     <div class="post-bar">
                                         <div class="post_topbar">
                                             <div class="usy-dt">
-                                                <img src="https://gambolthemes.net/workwise-new/images/resources/us-pic.png" alt="">
+                                            <img src="/images/lavi.jpg" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
                                                 <div class="usy-name">
                                                     <h3 id="profileName"></h3>
                                                     <span><img src="https://gambolthemes.net/workwise-new/images/clock.png" alt="">3 min ago</span>
@@ -103,7 +110,7 @@
                                         <div class="job-status-bar">
                                             <ul class="like-com">
                                                 <li><a href="#"><i class="fas fa-heart"></i> Like</a></li>
-                                                <li><a href="#" class="com"><i class="fas fa-comment-alt"></i> Comment 15</a></li>
+                                                <li><a href="#" class="com" style="top: 0px;"><i class="fas fa-comment-alt"></i> Comment 15</a></li>
                                             </ul>
                                             <a href="#"><i class="fas fa-eye"></i>Views 50</a>
                                         </div>
