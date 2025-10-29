@@ -8,10 +8,10 @@
 				<div class="header-data">
 					
 					<div class="search-bar">
-						<form>
-							<input type="text" name="search" placeholder="Search...">
-							<button type="submit"><i class="la la-search"></i></button>
-						</form>
+						
+<input type="text" id="search" placeholder="Search..." class="form-control">
+<div id="search-results" class="list-group position-absolute w-50" style="z-index: 1000;"></div>
+
 					</div><!--search-bar end-->
 					<nav>
 						<ul>
