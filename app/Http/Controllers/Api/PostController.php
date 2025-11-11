@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Like; // Import the Like Model
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -15,8 +16,14 @@ class PostController extends Controller
     public function index()
     {
         $userId = auth()->id(); // get logged-in user ID from sanctum token
+        
+        // FIX: Use withCount('likes') to calculate the number of likes for each post
+        // The resulting JSON will now include 'likes_count' property.
         return Post::with('user')
-            ->where('user_id', $userId)
+            ->withCount('likes') // <-- CRITICAL ADDITION
+            // IMPORTANT: If you want to show posts from all users (like a feed), 
+            // you should remove or change the next line:
+            // ->where('user_id', $userId) 
             ->orderBy('id', 'desc')
             ->get();
     }
@@ -62,5 +69,32 @@ class PostController extends Controller
     {
         $post->delete();
         return response()->json(null, 204);
+    }
+
+    /**
+     * Toggles a like for a given post by the authenticated user.
+     * @param Post $post The post being liked/unliked.
+     */
+    public function toggleLike(Post $post)
+    {
+        $userId = auth()->id();
+
+        // 1. Find if a like already exists from this user for this post
+        $like = $post->likes()->where('user_id', $userId)->first();
+        $status = '';
+
+        if ($like) {
+            // 2. If the like exists, delete (unlike) it
+            $like->delete();
+            $status = 'unliked';
+        } else {
+            // 3. If no like exists, create a new one
+            // We use the relationship defined in the Post Model (likes())
+            $post->likes()->create(['user_id' => $userId]);
+            $status = 'liked';
+        }
+
+        // Return the status back to the JavaScript
+        return response()->json(['status' => $status]);
     }
 }

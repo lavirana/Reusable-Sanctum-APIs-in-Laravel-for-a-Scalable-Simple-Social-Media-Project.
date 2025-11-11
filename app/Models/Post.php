@@ -23,5 +23,12 @@ public function comments()
     return $this->hasMany(Comment::class);
 }
 
+// ...
+public function likes()
+{
+    // Ensure this model path is correct, e.g., App\Models\Like::class
+    return $this->hasMany(Like::class); 
+}
+// ...
 
 }

@@ -4,9 +4,12 @@
 <script type="text/javascript" src="{{ asset('js/jquery.mCustomScrollbar.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/scrollbar.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
+<!-- FIX: Is ReferenceError: $ is not defined ke liye, jQuery CDN ko load karna zaroori hai. -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </body>
 <script>
-  const BASE_URL = "http://127.0.0.1:8001";
+  const BASE_URL = "http://127.0.0.1:8000";
   document.addEventListener('DOMContentLoaded', function() {
     axios.defaults.baseURL = '/api';
     const token = localStorage.getItem('token');
@@ -209,7 +212,6 @@
 
 <script>
   $(document).ready(function() {
-
     const userId = $('.setprofileUserId').val(); // Profile being viewed (from hidden input)
     const token = localStorage.getItem('token'); // Logged-in user's token
     const $btn = $('.followBtn'); // Follow/Unfollow button
@@ -230,11 +232,8 @@
       success: function(res) {
         // make sure res.user exists or fallback
         const loggedInUserId = res.id || (res.user && res.user.id);
-        console.log('Logged-in User ID:', loggedInUserId, 'Profile User ID:', userId);
-
         // Step 2: Hide Follow button if viewing own profile
         if (parseInt(userId) === parseInt(loggedInUserId)) {
-          console.log('Own profile detected — hiding follow button');
           $btn.css('display', 'none'); // ✅ Hide using display:none
           return; // Stop further code
         }
@@ -315,15 +314,27 @@
 
 <script>
   $(document).ready(function() {
+    // -------------------------------------------------------------------
+    // 1. Retrieve essential constants from the HTML/Blade
+    // NOTE: BASE_URL must be defined earlier in your Blade template (as discussed previously)
     const token = localStorage.getItem('token');
     const $list = $('.users-list');
-
+    
+    // Check for the CSRF token in the meta tag
+    const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    
+    // Initial validation
     if (!token) {
       console.error("Token not found. Please login first.");
       return;
     }
+    if (!CSRF_TOKEN) {
+      console.error("CSRF token not found. Check your Blade view for the <meta name='csrf-token' ...>");
+    }
+    // -------------------------------------------------------------------
 
-    // Fetch logged-in user info first
+
+    // Fetch logged-in user info first (GET request - no CSRF needed)
     $.ajax({
       url: `${BASE_URL}/api/v1/me`,
       method: 'GET',
@@ -343,14 +354,13 @@
             'Accept': 'application/json'
           },
           success: function(res) {
-
             $list.empty();
             if (res.users && res.users.length > 0) {
               res.users.forEach(function(user, index) {
                 // Skip the logged-in user
                 if (user.id === loggedInUserId) return;
 
-                const isFollowed = user.is_following || false; // API should send this
+                const isFollowed = user.is_following || false; 
                 const btnText = isFollowed ? 'Unfollow' : 'Follow';
                 const btnColor = isFollowed ? '#e53935' : '#43cea2';
 
@@ -368,7 +378,7 @@
     </div>
     <!-- Right: Actions -->
     <div class="user-actions">
-      <a href="http://127.0.0.1:8001/messages/${user.id}" class="btn btn-message" style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff;">Message</a>
+      <a href="${BASE_URL}/messages/${user.id}" class="btn btn-message" style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff;">Message</a>
       <button style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff; " class="btn btn-follow" 
               data-status="${isFollowed ? 'followed' : 'unfollowed'}" 
               style="--btn-color:${btnColor};">
@@ -401,6 +411,11 @@
       const userId = $btn.closest('.suggestion-usd').data('user-id');
       const currentStatus = $btn.data('status');
 
+      // Check if token exists before proceeding
+      if (!CSRF_TOKEN) {
+         alert('CSRF token is missing. Cannot perform action.');
+         return;
+      }
       $btn.prop('disabled', true).text('Please wait...');
 
       $.ajax({
@@ -408,9 +423,12 @@
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          // **CRITICAL FIX: ADD THE CSRF TOKEN TO THE HEADERS**
+          'X-CSRF-TOKEN': CSRF_TOKEN 
         },
         success: function(res) {
+          console.log('Follow/Unfollow response:', res);
           const newStatus = res.status || (currentStatus === 'followed' ? 'unfollowed' : 'followed');
           const isFollowed = newStatus === 'followed';
 
@@ -421,15 +439,16 @@
               'linear-gradient(135deg,#43cea2,#185a9d)')
             .prop('disabled', false);
         },
-        error: function() {
-          alert('Something went wrong.');
-          $btn.prop('disabled', false).text('Follow');
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.error('Follow/Unfollow failed:', jqXHR.responseText);
+          // Alert specific error if it's the CSRF mismatch we are debugging
+          alert('Error during follow operation. Check console for details.');
+          $btn.prop('disabled', false).text(currentStatus === 'followed' ? 'Unfollow' : 'Follow');
         }
       });
     });
   });
 </script>
-
 
 <script>
   $(document).ready(function() {
@@ -457,15 +476,11 @@
 
 <script>
   $(document).ready(function() {
-    // Ye jQuery ka special function hai. Matlab: “wait karo tab tak jab tak pura HTML page load na ho jaye, phir JS execute karo.” Agar tum JS ko turant run karte ho bina wait kiye, toh ho sakta hai ki DOM elements (jaise #userList ya #chatBox) abhi exist na karein → JS error aayega. //
-
     const token = localStorage.getItem('token');
-
     if (!token) {
       console.error("Token not found. Please login first.");
       return;
     }
-
     $.ajax({
       url: `${BASE_URL}/get_user/2`,
       method: 'GET',
