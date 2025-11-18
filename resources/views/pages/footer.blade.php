@@ -473,7 +473,6 @@
     });
   });
 </script>
-
 <script>
   $(document).ready(function() {
     const token = localStorage.getItem('token');
