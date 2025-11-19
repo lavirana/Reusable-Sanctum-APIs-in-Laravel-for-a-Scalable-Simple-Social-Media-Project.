@@ -86,7 +86,7 @@ class ProfileController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('pages/edit_profile');
     }
 
     /**

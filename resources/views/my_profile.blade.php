@@ -6,12 +6,14 @@
     .cover-sec {
         position: relative;
     }
+
     .cover-sec img {
         width: 100%;
         height: 250px;
         object-fit: cover;
         border-radius: 5px;
     }
+
     .add-pic-box label {
         background: #ff5733;
         color: #fff;
@@ -21,6 +23,7 @@
         display: inline-block;
         margin-top: 10px;
     }
+
     #saveCoverBtn {
         display: none;
         background: #28a745;
@@ -34,9 +37,9 @@
 </style>
 
 <section class="cover-sec">
-<img id="coverImage"  alt="Cover Image">
+    <img id="coverImage" alt="Cover Image">
 
-<!---@if($user->cover_photo)
+    <!---@if($user->cover_photo)
     <img src="{{ asset($user->cover_photo) }}" alt="Cover Photo" width="200">
 @else
     <p>No cover photo uploaded</p>
@@ -57,7 +60,6 @@
         </div>
     </div>
 </section>
-
 <main>
     <div class="main-section">
         <div class="container">
@@ -77,26 +79,26 @@
                                     <ul class="flw-status">
                                         <li><span>Following</span><b>{{ $user->following->count() }}</b></li>
                                         <li><span>Followers</span><b>{{ $user->followers->count() }}</b></li>
-                                       
+
                                     </ul>
                                 </div>
                                 @if($user->socialLinks)
                                 <ul class="social_links">
-                                    
-<li><a href="{{ $user->socialLinks->site_link }}" title=""><i class="la la-globe"></i> {{ $user->socialLinks->site_link }}</a></li>
-<li><a href="{{ $user->socialLinks->face_link }}" title=""><i class="fa fa-facebook-square"></i> {{ $user->socialLinks->face_link }}</a></li>
-<li><a href="{{ $user->socialLinks->x_link }}" title=""><i class="fa fa-twitter"></i> {{ $user->socialLinks->x_link }}</a></li>
-<li><a href="{{ $user->socialLinks->insta_link }}" title=""><i class="fa fa-instagram"></i>{{ $user->socialLinks->insta_link }}</a></li>
+
+                                    <li><a href="{{ $user->socialLinks->site_link }}" title=""><i class="la la-globe"></i> {{ $user->socialLinks->site_link }}</a></li>
+                                    <li><a href="{{ $user->socialLinks->face_link }}" title=""><i class="fa fa-facebook-square"></i> {{ $user->socialLinks->face_link }}</a></li>
+                                    <li><a href="{{ $user->socialLinks->x_link }}" title=""><i class="fa fa-twitter"></i> {{ $user->socialLinks->x_link }}</a></li>
+                                    <li><a href="{{ $user->socialLinks->insta_link }}" title=""><i class="fa fa-instagram"></i>{{ $user->socialLinks->insta_link }}</a></li>
                                 </ul>
                                 @else
-    <p>No social links available.</p>
-@endif
+                                <p>No social links available.</p>
+                                @endif
                                 <ul class="user-fw-status">
-								
-									<li>
-										<a href="#" title="" style="color: #185a9d;">Edit Profile</a>
-									</li>
-								</ul>
+
+                                    <li>
+                                        <a href="/edit-profile/{{ $user->id; }}" title="" style="color: #185a9d;">Edit Profile</a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -106,18 +108,18 @@
                             <div class="product-feed-tab current" id="feed-dd">
                                 <div class="posts-section">
 
-                    @if($user->posts->isEmpty())
-                    <div class="post-bar">
-    <p>No posts available.</p>  
-</div>
-@endif
-                
-                                @foreach($user->posts as $post)
+                                    @if($user->posts->isEmpty())
+                                    <div class="post-bar">
+                                        <p>No posts available.</p>
+                                    </div>
+                                    @endif
+
+                                    @foreach($user->posts as $post)
 
                                     <div class="post-bar">
                                         <div class="post_topbar">
                                             <div class="usy-dt">
-                                            <img src="/images/lavi.jpg" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
+                                                <img src="/images/lavi.jpg" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
                                                 <div class="usy-name">
                                                     <h3>Ashish Rana</h3>
                                                     <span><img src="https://gambolthemes.net/workwise-new/images/clock.png" alt="">3 min ago</span>
@@ -132,16 +134,16 @@
                                                 <li><a href="#"><i class="fas fa-heart"></i> Like</a></li>
                                                 <li><a href="#" class="com" style="top: 0px;"><i class="fas fa-comment-alt"></i> Comment 15</a></li>
                                                 <div class="comments">
-            @foreach($post->comments as $comment)
-                <p><strong>{{ $comment->user->name }}:</strong> {{ $comment->text }}</p>
-            @endforeach
-        </div>
+                                                    @foreach($post->comments as $comment)
+                                                    <p><strong>{{ $comment->user->name }}:</strong> {{ $comment->text }}</p>
+                                                    @endforeach
+                                                </div>
                                             </ul>
-                                           
+
                                         </div>
                                     </div>
 
-@endforeach
+                                    @endforeach
 
 
                                 </div>
@@ -160,7 +162,7 @@
                                     <img src="https://gambolthemes.net/workwise-new/images/resources/s1.png" alt="">
                                     <div class="sgt-text">
                                         <h4>Reetika Rajput</h4>
-                                       
+
                                     </div>
                                     <span><i class="la la-plus"></i></span>
                                 </div>
@@ -190,53 +192,51 @@
 </footer>
 
 <script>
-function previewCover(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('coverImage').src = e.target.result;
-            document.getElementById('saveCoverBtn').style.display = 'inline-block';
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-function saveCover() {
-    const formData = new FormData();
-    formData.append('cover', document.getElementById('coverInput').files[0]);
-    formData.append('_token', '{{ csrf_token() }}');
-
-	const token = localStorage.getItem('token'); // assuming you stored the token
-
-
-    $.ajax({
-        url: "{{ route('upload.cover') }}",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-		headers: {
-        'Authorization': `Bearer ${token}`,
-        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    },
-        success: function(response) {
-            if (response.success) {
-                alert('Cover photo uploaded!');
-                $('#coverImage').attr('src', response.path);
-                $('#saveCoverBtn').hide();
-            } else {
-                alert(response.message);
-            }
-        },
-        error: function(xhr) {
-            console.log(xhr.responseText);
-            alert('Error uploading file.');
+    function previewCover(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('coverImage').src = e.target.result;
+                document.getElementById('saveCoverBtn').style.display = 'inline-block';
+            };
+            reader.readAsDataURL(file);
         }
-    });
-}
+    }
+
+    function saveCover() {
+        const formData = new FormData();
+        formData.append('cover', document.getElementById('coverInput').files[0]);
+        formData.append('_token', '{{ csrf_token() }}');
+
+        const token = localStorage.getItem('token'); // assuming you stored the token
 
 
+        $.ajax({
+            url: "{{ route('upload.cover') }}",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert('Cover photo uploaded!');
+                    $('#coverImage').attr('src', response.path);
+                    $('#saveCoverBtn').hide();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+                alert('Error uploading file.');
+            }
+        });
+    }
 </script>
 
 @endsection

@@ -24,6 +24,7 @@ Route::get('/login', function () {
 Route::middleware('auth:sanctum')->get('/get_user/{id}', [AuthController::class, 'get_user_profile']);
 Route::post('/upload-cover', [ProfileController::class, 'uploadCover'])->name('upload.cover');
 Route::get('/profile-detail/{id}', [ProfileController::class, 'index']);
+Route::get('/edit-profile/{id}', [ProfileController::class, 'edit']);
 
 Route::get('/messages/{receiverId?}', function ($receiverId = null) {
     return view('messages', ['receiverId' => $receiverId]);
