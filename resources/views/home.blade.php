@@ -1,6 +1,73 @@
 @extends('pages.layout')
 @section('content')
 <main>
+	<style>
+		/* --- Global Container Styles --- */
+.suggestions-list {
+
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    padding: 15px;
+}
+
+#mostViewedList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+
+/* --- Individual User Card Styles --- */
+.viewed-user-card {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9; 
+    border: 1px solid #eeeeee; 
+    transition: all 0.2s ease-in-out; 
+}
+
+/* Hover effect */
+.viewed-user-card:hover {
+    background-color: #f0f8ff;
+    border-color: #3b82f6; 
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Typography Styles --- */
+.viewed-user-card h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333; 
+    margin: 0;
+    flex-grow: 1;
+}
+
+.viewed-user-card p {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280; 
+    margin: 0;
+   
+    text-align: right;
+    min-width: 90px; 
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .viewed-user-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .viewed-user-card p {
+        text-align: left;
+    }
+}
+	</style>
 	<div class="main-section">
 		<div class="container">
 			<div class="main-section-data">
@@ -11,7 +78,7 @@
 								<div class="user-profile">
 			                       <div class="username-dt" style="background: linear-gradient(135deg, #43cea2, #185a9d);">
 										<div class="usr-pic">
-											<img src="http://localhost:8000/images/lavi.jpg" alt="">
+											<img src="{{ auth()->user()->profile_pic }}" alt="">
 										</div>
 									</div><!--username-dt end-->
 									<div class="user-specs">
@@ -36,7 +103,7 @@
 										<span class="followers"></span>
 									</li>
 									<li>
-										<a href="profile-detail/2" title="" style="color: #185a9d;">View Profile</a>
+										<a href="profile-detail/{{ auth()->user()->id }}" title="" style="color: #185a9d;">View Profile</a>
 									</li>
 								</ul>
 							</div><!--user-data end-->
@@ -46,7 +113,7 @@
 						<div class="main-ws-sec">
 							<div class="post-topbar" style="border-top: 4px solid #43cea2;">
 								<div class="user-picy">
-									<img src="/images/lavi.jpg" alt="" style="border-radius: 30px;">
+									<img src="{{ auth()->user()->profile_pic }}" alt="" style="border-radius: 30px;">
 								</div>
 								<div class="post-st">
 									<ul>

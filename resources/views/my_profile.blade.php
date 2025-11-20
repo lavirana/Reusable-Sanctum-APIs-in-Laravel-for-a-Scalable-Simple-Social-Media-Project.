@@ -69,7 +69,7 @@
                         <div class="main-left-sidebar">
                             <div class="user_profile">
                                 <div class="user-pro-img">
-                                    <img src="http://127.0.0.1:8001/images/lavi.jpg" id="profileImage">
+                                    <img src="/{{ $user->profile_pic; }}" id="profileImage">
                                     <div class="add-dp" id="OpenImgUpload">
                                         <input type="file" id="file">
                                         <label for="file"><i class="fas fa-camera"></i></label>
@@ -119,9 +119,9 @@
                                     <div class="post-bar">
                                         <div class="post_topbar">
                                             <div class="usy-dt">
-                                                <img src="/images/lavi.jpg" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
+                                                <img src="/{{ $user->profile_pic; }}" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
                                                 <div class="usy-name">
-                                                    <h3>Ashish Rana</h3>
+                                                    <h3>{{ $user->name; }}</h3>
                                                     <span><img src="https://gambolthemes.net/workwise-new/images/clock.png" alt="">3 min ago</span>
                                                 </div>
                                             </div>

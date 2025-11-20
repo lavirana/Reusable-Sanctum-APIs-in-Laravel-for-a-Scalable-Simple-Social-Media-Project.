@@ -83,6 +83,23 @@ class ProfileController extends Controller
         return response()->json(['success' => false, 'message' => 'No file uploaded.']);
     }
     
+    public function updatePic(Request $request){
+        $user = auth()->user();
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not authenticated.');
+        }
+        if(request()->hasFile('profile_pic')){
+            $file = request()->file('profile_pic');
+            $filename = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('images'), $filename);
+
+            $user->profile_pic = 'images/' . $filename;
+            $user->save();
+            return redirect()->back()->with('success', 'Profile Picture updated successfully.');
+        }
+        return redirect()->back()->with('error', 'No file uploaded.');
+
+    }
 
 
     /**

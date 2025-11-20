@@ -34,7 +34,12 @@
       <div class="card mb-3" id="post-${p.id}">
         <div class="card-body" style="padding:10px;">
           <div class="d-flex align-items-center mb-2">
-            <img src="${BASE_URL}/images/lavi.jpg" alt="" style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;">
+           <img 
+    src="${p.user.profile_pic || 'https://placehold.co/50x50/e0e0e0/505050?text=Default'}" 
+    alt="User" 
+    style="width:36px;height:36px;border-radius:50%;border:1px solid #3ab07f;margin-right:10px;"
+>
+
             <strong>${escapeHtml(p.user?.name || 'Unknown')}</strong>
           </div>
           <h5>${escapeHtml(p.title)}</h5>

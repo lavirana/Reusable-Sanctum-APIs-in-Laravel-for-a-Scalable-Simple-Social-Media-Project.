@@ -71,14 +71,17 @@
     font-size: x-large;
     margin-bottom: 3%;">Update Profile Picture</h1>
                     <div class="col-lg-12">
-                    <form action="" method="POST" enctype="multipart/form-data" id="profileForm">
-            <!-- Image Preview Area -->
+                    <form action={{route('update.profile_pic')}} method="POST" enctype="multipart/form-data" id="profileForm">
+          @csrf
+          @method('PUT')
+                    <!-- Image Preview Area -->
             <div class="flex flex-col items-center mb-6">
                 <div class="image-container mb-4" id="imageContainer">
                     <!-- Default/Current Profile Image -->
+                
                     <img 
                         id="profilePreview" 
-                        src="https://placehold.co/150x150/e0e0e0/505050?text=Current+Image" 
+                        src="{{ $user_detail->profile_pic ? asset($user_detail->profile_pic) : 'https://placehold.co/150x150/e0e0e0/505050?text=Default' }}" 
                         alt="Profile Picture"
                         onerror="this.onerror=null; this.src='https://placehold.co/150x150/e0e0e0/505050?text=Default';"
                     >
@@ -87,7 +90,7 @@
                 <!-- Hidden File Input -->
                 <input 
                     type="file" 
-                    name="profile_picture" 
+                    name="profile_pic" 
                     id="profile_picture_input" 
                     accept="image/*"
                     onchange="previewImage(event)"
