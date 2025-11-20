@@ -927,4 +927,41 @@
         });
     </script>
 
+<script>
+        // JavaScript function to display the image preview
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const previewElement = document.getElementById('profilePreview');
+            const fileInput = document.getElementById('profile_picture_input');
+            const imageContainer = document.getElementById('imageContainer');
+
+            if (file) {
+                // Check if the file is an image
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file (jpg, png, gif, etc.).');
+                    fileInput.value = ''; // Clear the input
+                    return;
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Update the image source with the selected file data
+                    previewElement.src = e.target.result;
+                    // Optional: Change border color to show selection
+                    imageContainer.style.borderColor = '#10b981'; // Green color
+                };
+                
+                reader.readAsDataURL(file);
+            } else {
+                // If the user cancels the selection, reset to default placeholder
+                previewElement.src = "https://placehold.co/150x150/e0e0e0/505050?text=Current+Image";
+                imageContainer.style.borderColor = '#3b82f6'; // Reset border color
+            }
+        }
+        
+        // Ensure form enctype is correctly set (already in HTML, but good practice)
+        document.getElementById('profileForm').enctype = 'multipart/form-data';
+    </script>
+
 </html>

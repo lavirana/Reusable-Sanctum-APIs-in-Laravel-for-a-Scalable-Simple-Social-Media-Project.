@@ -2,11 +2,122 @@
 @section('title', 'My Profile')
 @section('content')
 <main>
+    <style>
+        .alert {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border: 1px solid #f5c2c7;
+            color: #842029;
+        }
+
+        .alert ul {
+            padding-left: 25px;
+            margin: 0;
+        }
+
+        .alert ul li {
+            margin-bottom: 5px;
+        }
+
+        .profile-card {
+            max-width: 400px;
+            width: 100%;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Hide the default file input */
+        #profile_picture_input {
+            opacity: 0;
+            position: absolute;
+            z-index: -1;
+        }
+        .image-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #3b82f6; /* Blue border */
+            transition: border-color 0.3s;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .upload-button-label {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .upload-button-label:hover {
+            background-color: #1e40af;
+        }
+    </style>
     <div class="main-section">
         <div class="container">
             <div class="main-section-data" style="padding: 12px;
     background-color: white;
-    border: 1px solid #80808070;">
+    border: 1px solid #80808070; margin-top:20px">
+                <div class="row">
+                    <h1 style="    font-weight: 600;
+    font-size: x-large;
+    margin-bottom: 3%;">Update Profile Picture</h1>
+                    <div class="col-lg-12">
+                    <form action="" method="POST" enctype="multipart/form-data" id="profileForm">
+            <!-- Image Preview Area -->
+            <div class="flex flex-col items-center mb-6">
+                <div class="image-container mb-4" id="imageContainer">
+                    <!-- Default/Current Profile Image -->
+                    <img 
+                        id="profilePreview" 
+                        src="https://placehold.co/150x150/e0e0e0/505050?text=Current+Image" 
+                        alt="Profile Picture"
+                        onerror="this.onerror=null; this.src='https://placehold.co/150x150/e0e0e0/505050?text=Default';"
+                    >
+                </div>
+                
+                <!-- Hidden File Input -->
+                <input 
+                    type="file" 
+                    name="profile_picture" 
+                    id="profile_picture_input" 
+                    accept="image/*"
+                    onchange="previewImage(event)"
+                >
+                
+                <!-- Custom Button to Trigger File Input -->
+                <label 
+                    for="profile_picture_input" 
+                    class="upload-button-label bg-blue-600 text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition duration-300"
+                >
+                    Choose New Photo
+                </label>
+            </div>
+            
+            <!-- Submit Button -->
+            <input 
+                type="submit" 
+                name="Update" 
+                value="Upload Image" 
+                class="btn btn-primary bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 cursor-pointer"
+            >
+        </form>
+                    </div>
+                </div>
+            </div>
+
+           
+            <div class="main-section-data" style="padding: 12px;
+    background-color: white;
+    border: 1px solid #80808070;margin-top:20px">
                 <div class="row">
                     <h1 style="    font-weight: 600;
     font-size: x-large;
