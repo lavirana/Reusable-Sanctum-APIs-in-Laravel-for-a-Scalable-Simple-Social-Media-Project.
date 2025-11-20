@@ -88,12 +88,12 @@ Endpoint	Method	Description	Auth
 ✅ = Requires Sanctum token
 ❌ = Public route
 
-![alt text](<Screenshot 2025-11-20 at 8.03.59 PM.png>)
+![alt text](<Screenshot 2025-11-20 at 8.03.59 PM-1.png>)
 
-![alt text](<Screenshot 2025-10-17 at 4.11.29 PM.png>)
-
-![alt text](<Screenshot 2025-10-17 at 4.02.24 PM.png>)
+![alt text](<Screenshot 2025-11-20 at 8.07.33 PM.png>)
 
 ![alt text](<Screenshot 2025-10-26 at 8.06.30 PM.png>)
 
 ![alt text](<Screenshot 2025-10-28 at 3.59.57 PM.png>)
+
+![alt text](<Screenshot 2025-11-20 at 8.08.29 PM.png>)
