@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Models\ProfileView;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+
 
 class ProfileController extends Controller
 {
@@ -95,11 +99,46 @@ class ProfileController extends Controller
      */
     public function update(Request $request, string $id)
     {
+            $request->validate([
+                    'name' => 'required|string|max:255',
+                    'email' => 'required|email|max:255',
+                ]);
             $user = User::findOrFail($id);
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->save();
             return redirect()->back()->with('success', 'Profile updated successfully.');
+    }
+
+
+    public function updatePassword(Request $request)
+    {
+        $user = $user = Auth::user();
+        
+        if(!$user){
+            return redirect()->back()->with('error', 'User not authenticated.');
+        }
+        try{
+            $request->validate([
+                'current_password' => 'required',
+                'password' => 'required|min:8|confirmed',
+              ]);
+        } catch (ValidationException $e) {
+            // Return with errors, specifying the 'passwordUpdate' error bag
+            return redirect()->back()->withErrors($e->errors(), 'passwordUpdate')->withInput();
+        }
+
+         // 2. Custom current password check
+        // Check if the current password matches the one in the database
+        if (!Hash::check($request->input('current_password'), $user->password)) {
+            // Manually return error to the 'passwordUpdate' bag
+            return redirect()->back()->withErrors(['current_password' => 'The current password you provided does not match our records.'], 'passwordUpdate')->withInput();
+        }
+        // 3. Update password
+        $user->password = Hash::make($request->input('password')); // Use Hash::make (modern Laravel) or bcrypt
+        $user->save();
+
+        return redirect()->back()->with('success', 'Password updated successfully.');
     }
 
     /**

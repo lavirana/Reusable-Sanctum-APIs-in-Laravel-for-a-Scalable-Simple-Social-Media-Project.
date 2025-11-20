@@ -33,27 +33,40 @@ class AuthController extends Controller
          ],201);
     }
 
-    public function login(Request $request){
-        $fields = $request->validate([
+    public function login(Request $request)
+    {
+        $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-
-        $user = User::where('email', $fields['email'])->first();
-
-        if(!$user || !Hash::check($fields['password'], $user->password)){
+    
+        // 1️⃣ Attempt web guard login
+        if (!auth()->attempt($request->only('email', 'password'))) {
             return response()->json([
                 'message' => 'Invalid credentials'
             ], 401);
         }
-
-        $token = $user->createToken('api_token')->plainTextToken;
-
+    
+        $user = auth()->user();
+    
+        // 2️⃣ Regenerate session for security (important)
+        $request->session()->regenerate();
+    
+        // 3️⃣ Create sanctum token (used by API calls)
+        $token = $user->createToken('web_token')->plainTextToken;
+    
+        // If request is from Blade form → redirect
+        if (!$request->expectsJson()) {
+            return redirect()->intended('/dashboard'); // or your homepage
+        }
+    
+        // If API request → return JSON
         return response()->json([
             'user' => $user,
             'token' => $token,
         ]);
     }
+    
 
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();

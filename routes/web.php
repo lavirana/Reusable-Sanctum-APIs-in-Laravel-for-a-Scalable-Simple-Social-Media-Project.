@@ -27,6 +27,10 @@ Route::get('/profile-detail/{id}', [ProfileController::class, 'index']);
 Route::get('/edit-profile/{id}', [ProfileController::class, 'edit']);
 Route::put('/update-profile/{id}', [ProfileController::class, 'update'])->name('update.profile');
 
+Route::middleware('auth:sanctum')->put('/update-user-password', [ProfileController::class, 'updatePassword'])
+     ->name('update.password');
+
+
 Route::get('/messages/{receiverId?}', function ($receiverId = null) {
     return view('messages', ['receiverId' => $receiverId]);
 });
