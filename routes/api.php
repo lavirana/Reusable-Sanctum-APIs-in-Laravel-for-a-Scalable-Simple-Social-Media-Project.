@@ -45,5 +45,7 @@ Route::middleware('auth:sanctum')->group(function (){
         Route::get('/messages/{receiver_id}', [MessageController::class, 'fetchMessages']);
         Route::post('/messages/send', [MessageController::class, 'sendMessage']);
         Route::get('/search', [SearchController::class, 'search']);
+        Route::post('/profile/view/{userId}', [AuthController::class, 'viewProfile']);
+
 });
 

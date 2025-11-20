@@ -966,7 +966,79 @@
         }
         
         // Ensure form enctype is correctly set (already in HTML, but good practice)
-        document.getElementById('profileForm').enctype = 'multipart/form-data';
+       //document.getElementById('profileForm').enctype = 'multipart/form-data';
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+    // -------------------------------
+    // 1. Extract profile ID from URL
+    // -------------------------------
+    const path = window.location.pathname;     // /profile-detail/3
+    const segments = path.split('/');
+    const profileId = segments[segments.length - 1];
+
+    // -------------------------------
+    // 2. Get logged-in user ID (from Sanctum API)
+    // -------------------------------
+    const token = localStorage.getItem('token');
+
+   // Check for the CSRF token in the meta tag
+   const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+    
+    // Initial validation
+    if (!token) {
+      console.error("Token not found. Please login first.");
+      return;
+    }
+    if (!CSRF_TOKEN) {
+      console.error("CSRF token not found. Check your Blade view for the <meta name='csrf-token' ...>");
+    }
+    // -------------------------------------------------------------------
+
+
+    try {
+        const me = await fetch(`${BASE_URL}/api/v1/me`, {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Accept": "application/json"
+            }
+        });
+
+        const meData = await me.json();
+        const loggedInUserId = meData.id;
+
+        // ----------------------------------------------------
+        // 3. Do NOT count views if user is watching own profile
+        // ----------------------------------------------------
+        if (parseInt(loggedInUserId) === parseInt(profileId)) {
+            console.log("Own profile visited — no view count updated.");
+            return;
+        }
+
+        // ----------------------------------------------------
+        // 4. Call the API to increment profile view
+        // ----------------------------------------------------
+        fetch(`${BASE_URL}/api/profile/view/` + profileId, {
+            method: 'POST',
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Accept": "application/json",
+                 // **CRITICAL FIX: ADD THE CSRF TOKEN TO THE HEADERS**
+                'X-CSRF-TOKEN': CSRF_TOKEN 
+            },
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("View updated:", data);
+        })
+        .catch(err => console.error("View update failed:", err));
+
+    } catch (error) {
+        console.error("Error loading user info:", error);
+    }
+});
+</script>
 
 </html>

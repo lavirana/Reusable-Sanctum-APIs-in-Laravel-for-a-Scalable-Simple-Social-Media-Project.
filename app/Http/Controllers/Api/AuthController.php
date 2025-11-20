@@ -105,18 +105,46 @@ class AuthController extends Controller
         'data' => $request->user()
     ]);
     }
-
-    public function mostViewed()
+    public function viewProfile($userId)
 {
-    $users = User::select('users.id', 'users.name', 'users.email', DB::raw('COUNT(profile_views.id) as total_views'))
+    $viewerId = auth('sanctum')->id();
+
+    // Prevent self-view count
+    if ($viewerId == $userId) {
+        return response()->json(['message' => 'Self view ignored']);
+    }
+
+    DB::table('profile_views')->insert([
+        'viewed_user_id' => $userId,
+        'viewer_id' => $viewerId,
+        'created_at' => now(),
+    ]);
+
+    return response()->json(['message' => 'View counted']);
+}
+
+
+public function mostViewed()
+{
+    $authUserId = auth('sanctum')->id();
+
+    $users = User::select(
+            'users.id',
+            'users.name',
+            'users.email',
+            DB::raw('COUNT(profile_views.id) as total_views')
+        )
         ->leftJoin('profile_views', 'users.id', '=', 'profile_views.viewed_user_id')
+        ->where('users.id', '!=', $authUserId) // remove logged-in user
         ->groupBy('users.id', 'users.name', 'users.email')
+        ->havingRaw('total_views > 0') // show only users with views
         ->orderByDesc('total_views')
         ->limit(10)
         ->get();
 
     return response()->json($users);
 }
+
 
 public function get_user_profile(Request $request, $id)
 {
