@@ -915,4 +915,16 @@
       });
 </script>
 
+<script>
+        $(document).ready(function() {
+            $('#togglePassword').on('click', function() {
+                const passwordInput = $('#passwordInput');
+                const toggleIcon = $('#toggleIcon');
+                const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+                passwordInput.attr('type', type);
+                toggleIcon.toggleClass('fa-eye fa-eye-slash');
+            });
+        });
+    </script>
+
 </html>

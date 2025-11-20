@@ -86,7 +86,8 @@ class ProfileController extends Controller
      */
     public function edit(string $id)
     {
-        return view('pages/edit_profile');
+        $user_detail = User::findOrFail($id);
+        return view('pages/edit_profile', compact('user_detail'));
     }
 
     /**
@@ -94,7 +95,11 @@ class ProfileController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+            $user = User::findOrFail($id);
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->save();
+            return redirect()->back()->with('success', 'Profile updated successfully.');
     }
 
     /**
