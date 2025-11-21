@@ -78,7 +78,11 @@
 								<div class="user-profile">
 			                       <div class="username-dt" style="background: linear-gradient(135deg, #43cea2, #185a9d);">
 										<div class="usr-pic">
-											<img src="{{ auth()->user()->profile_pic }}" alt="">
+											<img 
+											 src="{{ auth()->user()->profile_pic ? auth()->user()->profile_pic : 'https://placehold.co/50x50/e0e0e0/505050?text=Default' }}"
+											 alt="">
+
+											 
 										</div>
 									</div><!--username-dt end-->
 									<div class="user-specs">

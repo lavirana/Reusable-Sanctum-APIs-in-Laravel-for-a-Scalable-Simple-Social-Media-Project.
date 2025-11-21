@@ -1,17 +1,11 @@
-
-<body>	
-
-	<div class="wrapper">	
-		<header style="background: linear-gradient(135deg, #43cea2, #185a9d);
-">
+<body>
+<div class="wrapper">
+	<header style="background: linear-gradient(135deg, #43cea2, #185a9d);">
 			<div class="container">
 				<div class="header-data">
-					
 					<div class="search-bar">
-						
-<input type="text" id="search" placeholder="Search..." class="form-control">
-<div id="search-results" class="list-group position-absolute w-50" style="z-index: 1000;"></div>
-
+						<input type="text" id="search" placeholder="Search..." class="form-control">
+						<div id="search-results" class="list-group position-absolute w-50" style="z-index: 1000;"></div>
 					</div><!--search-bar end-->
 					<nav>
 						<ul>
@@ -21,22 +15,20 @@
 									Home
 								</a>
 							</li>
-					
-						
 							<li>
 								<a href="/messages" title="" class="not-box-openm">
 									<span><img src="https://gambolthemes.net/workwise-new/images/icon6.png" alt=""></span>
 									Messages
 								</a>
-								
 							</li>
-							
-							
+							<li>
+								<a href="#">
+								<span class="fa fa-bell" style="float: left;" id="notificationCount">0</span><br>
+								Notifications
+								</a>
+							</li>
 						</ul>
 					</nav><!--nav end-->
-
-								
-					
 					<div class="menu-btn">
 						<a href="#" title=""><i class="fa fa-bars"></i></a>
 					</div><!--menu-btn end-->
@@ -68,7 +60,6 @@
 									</div>
 								</li>
 							</ul>
-						
 							<h3>Setting</h3>
 							<ul class="us-links">
 								<li><a href="profile-account-setting.html" title="">Account Setting</a></li>
@@ -81,4 +72,4 @@
 					</div>
 				</div><!--header-data end-->
 			</div>
-		</header><!--header end-->	
+		</header><!--header end-->

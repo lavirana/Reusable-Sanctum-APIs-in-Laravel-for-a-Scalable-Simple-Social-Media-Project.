@@ -6,7 +6,9 @@
 <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
 <!-- FIX: Is ReferenceError: $ is not defined ke liye, jQuery CDN ko load karna zaroori hai. -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script>
+    window.USER_ID = "{{ auth()->id() }}";
+</script>
 </body>
 <script>
   const BASE_URL = "http://127.0.0.1:8000";

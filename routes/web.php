@@ -5,9 +5,13 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+
+
+Route::middleware('auth:sanctum')->get('/', function () {
     return view('home');
 });
+
+
 Route::get('/all-profile', function () {
     return view('all_profiles');
 });
@@ -17,6 +21,10 @@ Route::get('/messages', function () {
 Route::get('/login', function () {
     return view('login');
 })->name('login');
+
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
 
 Route::middleware('auth:sanctum')->get('/get_user/{id}', [AuthController::class, 'get_user_profile']);
 Route::post('/upload-cover', [ProfileController::class, 'uploadCover'])->name('upload.cover');

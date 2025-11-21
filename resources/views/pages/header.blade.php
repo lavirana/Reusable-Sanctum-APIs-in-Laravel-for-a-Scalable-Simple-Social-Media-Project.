@@ -24,6 +24,9 @@
  <!-- Font Awesome (Latest 6.x version) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">
+
+@vite(['resources/js/app.js'])
+
 </head>
 
 			
