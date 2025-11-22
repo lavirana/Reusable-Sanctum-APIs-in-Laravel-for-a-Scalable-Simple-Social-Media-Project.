@@ -121,7 +121,8 @@
 
                                             <div class="col-lg-12 no-pdd">
                                                 <div class="sn-field">
-                                                    <input type="password_confirmation" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" required>
+                                                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" required>
+
                                                     <i class="la la-lock"></i>
                                                 </div>
                                             </div>
