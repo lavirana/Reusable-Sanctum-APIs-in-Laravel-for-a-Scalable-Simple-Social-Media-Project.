@@ -17,7 +17,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
+//all unauthenticated routes
 Route::prefix('v1')->group(function(){
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
@@ -30,6 +30,7 @@ Route::prefix('v1')->group(function(){
     });
 });
 
+//all authenticated routes
 Route::middleware('auth:sanctum')->group(function (){
         Route::apiResource('posts', PostController::class);
         Route::put('/profile', [AuthController::class, 'update']);
