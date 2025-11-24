@@ -78,7 +78,7 @@ class PostController extends Controller
     public function toggleLike(Post $post)
     {
         $userId = auth()->id();
-
+        $user = auth()->user(); // the liker
         // 1. Find if a like already exists from this user for this post
         $like = $post->likes()->where('user_id', $userId)->first();
         $status = '';
@@ -93,6 +93,9 @@ class PostController extends Controller
             $post->likes()->create(['user_id' => $userId]);
             $status = 'liked';
         }
+
+        // notify post owner
+    $post->user->notify(new \App\Notifications\NewLikeNotification($user, $post));
 
         // Return the status back to the JavaScript
         return response()->json(['status' => $status]);

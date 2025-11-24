@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
@@ -40,3 +41,5 @@ Route::get('/messages/{receiverId?}', function ($receiverId = null) {
     return view('messages', ['receiverId' => $receiverId]);
 });
 Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])
+    ->middleware('auth');

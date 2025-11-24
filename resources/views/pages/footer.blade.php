@@ -1,11 +1,19 @@
-<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+<!-- 1. jQuery FIRST -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- 2. Popper -->
 <script type="text/javascript" src="{{ asset('js/popper.js') }}"></script>
+
+<!-- 3. Bootstrap -->
 <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+
+<!-- 4. Plugins that depend on jQuery -->
 <script type="text/javascript" src="{{ asset('js/jquery.mCustomScrollbar.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/scrollbar.js') }}"></script>
+
+<!-- 5. Your custom script.js -->
 <script type="text/javascript" src="{{ asset('js/script.js') }}"></script>
-<!-- FIX: Is ReferenceError: $ is not defined ke liye, jQuery CDN ko load karna zaroori hai. -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     window.USER_ID = "{{ auth()->id() }}";
 </script>
@@ -802,28 +810,28 @@
     // --- Event Handlers ---
 
     // Handle user click (open chat)
-    $(document).on('click', '.user-item', function() {
-        // Remove active class from previous item
-        $('.user-item').removeClass('active');
-        $(this).addClass('active');
+ // Handle user click (open chat)
+$(document).on('click', '.user-item', function() {
 
-        selectedReceiverId = $(this).data('id');
-        const userName = $(this).data('name');
-        const userImg = $(this).find('img').attr('src');
-        
-        // Update chat header details
-        $('#chatUserName').text(userName);
-        $('#chatUserImg').attr('src', userImg);
-        $('#receiverId').val(selectedReceiverId);
-        
-        // Enable input area
-        $('#messageInput').prop('disabled', false).focus();
-        $('#sendBtn').prop('disabled', false);
+$('.user-item').removeClass('active');
+$(this).addClass('active');
 
-        // Fetch history and start real-time listener
-        loadMessages(selectedReceiverId);
-        setupRealTimeListener(selectedReceiverId);
-    });
+selectedReceiverId = $(this).data('id');
+const userName = $(this).data('name');
+const userImg = $(this).find('img').attr('src');
+
+// Update chat header UI
+$('#chatUserName').text(userName);
+$('#chatUserImg').attr('src', userImg);
+$('#receiverId').val(selectedReceiverId);
+
+// Load previous messages
+loadMessages(selectedReceiverId);
+
+// Enable Realtime Listener
+setupRealTimeListener(selectedReceiverId);
+});
+
 
 
     // Handle message sending
@@ -1041,6 +1049,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error("Error loading user info:", error);
     }
 });
+</script>
+<script>
+  $.ajax({
+    url: '/notifications/unread-count',
+    method: 'GET',
+    success: function (response) {
+        $('#notification-count').text(response.unread);
+    }
+});
+
 </script>
 
 </html>
