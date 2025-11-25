@@ -129,29 +129,28 @@
     <div class="messages-sec row">
       
       <!-- USERS LIST -->
-      <div class="col-lg-4 col-md-12 no-pdd">
+      <!--<div class="col-lg-4 col-md-12 no-pdd">
         <div class="msgs-list">
           <div class="msg-title">
             <h3>Messages</h3>
           </div>
           <div class="messages-list" style="max-height: 50vh; overflow-y: auto;">
             <ul id="userList">
-              <!-- Will load dynamically -->
             </ul>
           </div>
         </div>
-      </div>
+      </div>-->
 
       <!-- CHAT WINDOW -->
-      <div class="col-lg-8 col-md-12 pd-right-none pd-left-none">
+      <div class="col-lg-12 col-md-12 pd-right-none pd-left-none">
         <div class="main-conversation-box">
           <div class="message-bar-head">
             <div class="usr-msg-details">
               <div class="usr-ms-img">
-                <img id="chatUserImg" src="https://via.placeholder.com/50" alt="Profile Image">
+                <img id="chatUserImg" src="https://placehold.co/50x50/e0e0e0/505050?text=Default" alt="Profile Image">
               </div>
               <div class="usr-mg-info">
-                <h3 id="chatUserName">Select a user</h3>
+                <h3 id="chatUserName">User Name</h3>
                 <p id="chatUserStatus">Online</p>
               </div>
             </div>
