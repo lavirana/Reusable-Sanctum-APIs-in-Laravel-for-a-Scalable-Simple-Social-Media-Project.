@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 
@@ -15,6 +16,13 @@ Route::middleware('auth:sanctum')->get('/', function () {
 Route::get('/all-profile', function () {
     return view('all_profiles');
 });
+
+Route::get('/chat/{id}', function($id){
+    return view('chat', [
+        'id' => $id,
+    ]);
+})->middleware('auth:sanctum')->name('chat');
+
 Route::get('/messages', function () {
     return view('messages');
 });
