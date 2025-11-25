@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Models\Message;
 use App\Models\User;
+use Laravel\Reverb\Pulse\Livewire\Messages;
 use Livewire\Component;
 
 class ChatComponent extends Component
@@ -11,6 +13,7 @@ class ChatComponent extends Component
     public $sender_id;
     public $receiver_id;
     public $message = '';
+    public $messages = [];
 
     public function render()
     {
@@ -22,10 +25,40 @@ class ChatComponent extends Component
         $this->sender_id = auth()->user()->id;
         $this->receiver_id = $user_id;
 
+
+$messages =     Message::where(function($query) {
+            $query->where('sender_id', $this->sender_id)
+                  ->where('receiver_id', $this->receiver_id);
+})->orWhere(function($query) {
+            $query->where('sender_id', $this->receiver_id)
+                  ->where('receiver_id', $this->sender_id);
+})->with('sender:id,name', 'receiver:id,name')->get();
+
+foreach($messages as $message){
+    $this->appendChatMessage($message);
+}
+
+
          $this->user = User::whereid($user_id)->first();
+
     }
 
     public function sendMessage(){
-                dd($this->message);  
+                $chatMessage = new Message();
+                $chatMessage->sender_id = $this->sender_id;
+                $chatMessage->receiver_id = $this->receiver_id;
+                $chatMessage->message = $this->message;
+                $chatMessage->save();
+                
+                $this->message = '';
+        }
+
+        public function appendChatMessage($message){
+            $this->messages[] = [
+                'id' => $message->id,
+                'sender' => $message->sender->name,
+                'receiver' => $message->receiver->name,
+                'message' => $message->message,
+            ];
         }
 }
