@@ -177,14 +177,14 @@
    <!-- LEFT message (other user) -->
    <div class="msg left">
                 <div class="message-inner-dt">
-                <b> {{ $msg['sender'] }} : </b>{{ $msg['message'] }}
+                <strong> {{ $msg['sender'] }} : </strong>{{ $msg['message'] }}
                 </div>
               </div>
             @else
        <!-- RIGHT message (logged-in user) -->
        <div class="msg right">
                 <div class="message-inner-dt">
-                {{ $msg['message'] }}  <b>: You</b>
+                {{ $msg['message'] }}  <strong>: You</strong>
                 </div>
               </div>
             @endif

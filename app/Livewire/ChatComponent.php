@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Events\MessageSendEvent;
 use App\Models\Message;
 use App\Models\User;
 use Laravel\Reverb\Pulse\Livewire\Messages;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ChatComponent extends Component
@@ -49,8 +51,18 @@ foreach($messages as $message){
                 $chatMessage->receiver_id = $this->receiver_id;
                 $chatMessage->message = $this->message;
                 $chatMessage->save();
-                
+                $this->appendChatMessage($chatMessage);
+                broadcast(new MessageSendEvent($chatMessage))->toOthers();
+
                 $this->message = '';
+        }
+
+        #[On('echo-private:chat-channel.{sender_id},MessageSendEvent')]
+        public function listenForMessage($event){
+           $chatMessage = Message::whereid($event['message']['id'])
+                            ->with('sender:id,name', 'receiver:id,name')
+                            ->first();
+              $this->appendChatMessage($chatMessage);
         }
 
         public function appendChatMessage($message){
