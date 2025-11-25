@@ -1,7 +1,4 @@
-@extends('pages.layout')
-@section('title', 'Messages')
-@section('content')
-
+<div>
 <style>
 /* --- Styles for Chat UI --- */
   .message-inner-dt {
@@ -132,20 +129,6 @@ div#mCSB_1_container {
 <section class="messages-page">
   <div class="container">
     <div class="messages-sec row">
-      
-      <!-- USERS LIST -->
-      <!--<div class="col-lg-4 col-md-12 no-pdd">
-        <div class="msgs-list">
-          <div class="msg-title">
-            <h3>Messages</h3>
-          </div>
-          <div class="messages-list" style="max-height: 50vh; overflow-y: auto;">
-            <ul id="userList">
-            </ul>
-          </div>
-        </div>
-      </div>-->
-
       <!-- CHAT WINDOW -->
       <div class="col-lg-12 col-md-12 pd-right-none pd-left-none">
         <div class="main-conversation-box">
@@ -153,10 +136,12 @@ div#mCSB_1_container {
             <span style="float: left; margin-top:20px;color:gray"><a href="/">Back</a></span>
             <div class="usr-msg-details">
               <div class="usr-ms-img">
-                <img id="chatUserImg" src="https://placehold.co/50x50/e0e0e0/505050?text=Default" alt="Profile Image">
+                <img id="chatUserImg" 
+                src="{{ $user->profile_pic ? asset($user->profile_pic) : 'https://placehold.co/50x50/e0e0e0/505050?text=Default' }}"
+                alt="Profile Image">
               </div>
               <div class="usr-mg-info">
-                <h3 id="chatUserName">User Name</h3>
+                <h3 id="chatUserName">{{ ucfirst($user->name); }}</h3>
                 <p id="chatUserStatus">Online</p>
               </div>
             </div>
@@ -196,11 +181,10 @@ div#mCSB_1_container {
 
           <!-- MESSAGE INPUT -->
           <div class="message-send-area">
-            <form id="sendMessageForm">
-                <input type="hidden" id="receiverId" value="">
+            <form wire:submit="sendMessage()">
                 <div class="mf-field">
-                    <input type="text" id="messageInput" placeholder="Type a message here">
-                    <button type="submit" id="sendBtn" style="background: linear-gradient(135deg,#43cea2,#185a9d);">Send</button>
+                    <input type="text" placeholder="Type a message here" wire:model="message">
+                    <button type="submit" style="background: linear-gradient(135deg,#43cea2,#185a9d);">Send</button>
                 </div>
             </form>
           </div>
@@ -211,22 +195,4 @@ div#mCSB_1_container {
   </div>
 </section>
 
-<!-- --- SCRIPTS FOR CHAT SYSTEM --- -->
-<!-- Set BASE_URL constant for JavaScript use -->
-<script>
-    const BASE_URL = '{{ url('/') }}';
-</script>
-
-<!-- Load jQuery (required for your script and AJAX) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<!-- Load Laravel Echo & Pusher (for real-time chat) -->
-<!-- NOTE: You must include your app.js file which initializes Echo (Pusher/Websockets) -->
-<!-- Example for Laravel Mix/Vite compiled asset: -->
-<!-- <script src="{{ asset('js/app.js') }}"></script> -->
-
-<!-- Load the custom chat logic -->
-<script src="{{ asset('js/chat_script.js') }}"></script> 
-<!-- If you are including the logic inline, use the content from Chat Logic Script file here -->
-
-@endsection
+</div>

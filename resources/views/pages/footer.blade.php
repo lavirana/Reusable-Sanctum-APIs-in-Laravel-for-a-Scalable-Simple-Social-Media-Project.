@@ -384,8 +384,9 @@
     </div>
     <!-- Right: Actions -->
     <div class="user-actions">
-      <a href="${BASE_URL}/messages/${user.id}" class="btn btn-message" style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff;">Message</a>
-      <button style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff; " class="btn btn-follow" 
+     <a href="${BASE_URL}/chat/${user.id}" class="btn btn-message btn-sm" style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff;">Chat</a>
+      <a href="${BASE_URL}/messages/${user.id}" class="btn btn-message btn-sm" style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff;">Message</a>
+      <button style="background: linear-gradient(135deg, var(--btn-color, #43cea2), #185a9d); color:#fff; " class="btn btn-follow btn-sm" 
               data-status="${isFollowed ? 'followed' : 'unfollowed'}" 
               style="--btn-color:${btnColor};">
         ${btnText}
