@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
@@ -51,3 +52,5 @@ Route::get('/messages/{receiverId?}', function ($receiverId = null) {
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])
     ->middleware('auth');
+
+Route::get('/create-article', [ArticleController::class, 'index'])->name('create-article'); 
