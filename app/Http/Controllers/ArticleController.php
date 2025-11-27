@@ -48,6 +48,8 @@ class ArticleController extends Controller
         $article->user_id = auth()->id() ?? 1;
         $article->save();
     
+
+
             PostPublished::dispatch($article);
         
         return redirect()
