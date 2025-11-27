@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostPublished;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+
 
 class ArticleController extends Controller
 {
@@ -47,14 +48,7 @@ class ArticleController extends Controller
         $article->user_id = auth()->id() ?? 1;
         $article->save();
     
-        // notify admin
-        Mail::raw("A new article titled ' {$article->title} ' has been published", function($message){
-            $message->to('admin@admin.com')
-            ->subject('New Article Published');
-        });
-
-        //notify all user
-
+            PostPublished::dispatch($article);
         
         return redirect()
             ->route('create-article')
