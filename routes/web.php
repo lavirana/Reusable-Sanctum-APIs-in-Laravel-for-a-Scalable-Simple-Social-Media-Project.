@@ -53,4 +53,5 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount'])
     ->middleware('auth');
 
-Route::get('/create-article', [ArticleController::class, 'index'])->name('create-article'); 
+Route::get('/create-article', [ArticleController::class, 'create'])->name('create-article'); 
+Route::middleware('auth:sanctum')->post('/store-article', [ArticleController::class, 'store'])->name('store-article');

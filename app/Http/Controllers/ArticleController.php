@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ArticleController extends Controller
 {
@@ -12,7 +14,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        return view('admin.article');
+       
     }
 
     /**
@@ -20,7 +22,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.article');
     }
 
     /**
@@ -28,8 +30,37 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'status' => 'required|in:active,inactive',
+            'views' => 'nullable|integer|min:0',
+            'featured' => 'nullable|boolean',
+        ]);
+    
+        $article = new Article();
+        $article->title = $validatedData['title'];
+        $article->body = $validatedData['body'];
+        $article->status = $validatedData['status'];
+        $article->views = $validatedData['views'] ?? 0;
+        $article->featured = $request->boolean('featured');
+        $article->user_id = auth()->id() ?? 1;
+        $article->save();
+    
+        // notify admin
+        Mail::raw("A new article titled ' {$article->title} ' has been published", function($message){
+            $message->to('admin@admin.com')
+            ->subject('New Article Published');
+        });
+
+        //notify all user
+
+        
+        return redirect()
+            ->route('create-article')
+            ->with('success', 'Article created successfully!');
     }
+    
 
     /**
      * Display the specified resource.
